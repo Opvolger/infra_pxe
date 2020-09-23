@@ -14,7 +14,8 @@ RUN yum -y install nginx
 RUN yum -y install nano wget unzip
 
 # install ipxe
-RUN yum -y install ipxe-bootimgs
+# uit we compileren zelf nieuwere
+#RUN yum -y install ipxe-bootimgs
 
 # cleanup yum 
 RUN yum clean all;

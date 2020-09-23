@@ -1,0 +1,6 @@
+- hosts: dummy
+  gather_facts: false
+  tasks:
+    - set_fact:
+        dir_root_ipxe: "{{ playbook_dir }}/../compiled/ipxe"
+        dir_temp: "{{ playbook_dir }}/../temp"

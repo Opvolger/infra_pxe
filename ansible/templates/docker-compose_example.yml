@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+  pxe:
+    image: opvolger/pxe:latest
+    network_mode: host
+    container_name: pxe
+    environment:
+      DHCP_RANGE: "{{ docker.env.dhcp_range }}"
+      PXE_IP_ADDRESS: "{{ docker.env.pxe_ip_address }}"
+      SAMBA_IP_ADDRESS: "{{ docker.env.samba_ip_address }}"
+      SAMBA_SHARE: "{{ docker.env.samba_share }}"
+      SAMBA_USERNAME: "{{ docker.env.samba_username }}"
+      SAMBA_PASSWORD: "{{ docker.env.samba_password }}"
+    volumes:
+        - "{{ docker.env.volume }}":/pxe
+    restart: unless-stopped

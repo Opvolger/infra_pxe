@@ -1,0 +1,52 @@
+- hosts: windows_adk
+  gather_facts: true
+  tasks:
+
+    - set_fact:
+        dir_temp: "c:\\temp"
+
+    - name: create temp dir
+      win_file:
+        path: '{{ dir_temp }}'
+        state: directory
+
+    - name: copy scripts
+      win_copy:
+        src: "{{ item }}"
+        dest: '{{ dir_temp }}\{{ item }}'
+      with_items:
+        - set_adk_vars_and_run_powershell_script.bat
+        - create_winpe_with_powershell.ps1
+
+    # - name: run scripts (can take some time)
+    #   win_shell: cmd.exe /c c:\temp\set_adk_vars_and_run_powershell_script.bat
+
+    # - name: zip a directory
+    #   win_shell: 'Compress-Archive -Path {{ dir_temp }}\\winpe -DestinationPath {{ dir_temp }}\\winpe.zip'
+    #   args:
+    #     chdir: "{{ dir_temp }}"
+
+    - name: "Download with samba"
+      block:
+      - name: Check if samba-client is installed
+        shell: smbclient --version
+        register: shell_out
+
+      - name: Fail is samba-client is not installed
+        fail:
+          msg: "aborting, samba-client isn't installed. Install it with your favorite package manager"
+        when: '"Version" not in shell_out.stdout'
+
+      - name: "copy release FRB from samba-share"
+        command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../compiled/; mget winpe.zip'''
+        register: release_downloaded
+        no_log: True # your creds!
+      delegate_to: localhost
+      when: download_with_samba | bool
+
+    - name: get zip (very slow 30m+ big file and winrm!)
+      fetch:
+        src: "{{ dir_temp }}\\winpe.zip"
+        dest: "{{ playbook_dir }}/../compiled/winpe.zip"
+        flat: yes
+      when: not download_with_samba | bool

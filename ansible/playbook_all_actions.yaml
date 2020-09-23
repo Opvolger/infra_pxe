@@ -1,0 +1,12 @@
+---
+# first compile the ipxe code
+- import_playbook: playbook_compile_ipxe.yaml
+
+- import_playbook: playbook_create_docker_image.yaml
+
+# create wimboot
+# This windows machine must gave installed Windows ADK and Windows PE add-on for the ADK!!!
+# https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install
+# enable winrm on Windows machine `Enable-PSRemoting -Force`
+- import_playbook: playbook_create_wimboot.yaml
+  when: add_winboot | bool

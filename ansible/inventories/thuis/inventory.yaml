@@ -1,0 +1,76 @@
+---
+all:
+  vars:
+    boot_ipxe:
+      download_png: https://www.onlygfx.com/wp-content/uploads/2017/03/black-burst-abstract-bg.png
+      samba: '{{ samba }}'
+      nfs: '{{ nfs }}'
+      menu_default: ubuntu
+      menu_os_items:
+        linux:
+          - name: ubuntu
+            key: u
+            text: (u) Boot Ubuntu 20.04 (64) (from samba)
+        windows:
+          - name: windows10setup
+            key: w
+            text: (1) Boot Windows 10 ----- installer .iso --- (from samba)
+            boot_commands:
+              - cpuid --ext 29 && set arch amd64 || set arch x86
+              - kernel http://${ipxe_server_ip}/ipxe/wimboot
+              - initrd http://${ipxe_server_ip}/boot/windows10setup/winpeshl.ini           winpeshl.ini
+              - initrd http://${ipxe_server_ip}/boot/windows10setup/startup.ps1            startup.ps1
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD               BCD
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi          boot.sdi
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim       boot.wim
+
+
+    docker_hub_username: opvolger
+    docker_hub_token: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;thuis
+          61336232333661373264396331306430356134383533373764663465336165653366306637373164
+          3932666534636538383564613262366161303738386639360a623965393232326163633662353163
+          65366539333463356338623837373461333264613433643034666631333735376435303536326462
+          6632653832346361380a623630353861393034313566363363653436666137613166623732653865
+          35366434623265373131656335396461636363396132366639393362663764623035356235666234
+          6465623536393239303366656461633636323862373461383233
+    docker_volume_pxe: "/home/opvolger/pxe/pxe"
+    dhcp_range_for_pxe_boot: "192.168.2.150"
+    # samba and nfs on the same nas
+    nas:
+      hostname: "192.168.2.13"
+      share: "boot"
+      username: "boot"
+      password: !vault |
+          $ANSIBLE_VAULT;1.2;AES256;thuis
+          37666133336534363836323032623236643537366338383739353561666332633730366365386632
+          6338313233313433616136303939333236633866313632390a613038393362326235343133383364
+          61626237313563333362376465376361326635316337376333373265663763393032306337316431
+          6237373131326534300a353438646436386535333461643738323062323263653438346534363835
+          3864
+    nfs:
+      hostname: "{{ nas.hostname }}"
+      share: "/volume1/{{ nas.share }}"
+      username: "{{ nas.username }}"
+      password: "{{ nas.password }}"
+    samba:
+      hostname: "{{ nas.hostname }}"
+      share: "{{ nas.share }}"
+      username: "{{ nas.username }}"
+      password: "{{ nas.password }}"
+    add_winboot: true
+    download_with_samba: true
+    ipxe:
+      ip_address: "192.168.2.17"
+      git:
+        version: "fe69934191ca46c4948a71f416c21dcc5a29e63a" #"v1.20.1" werkt niet
+  children:
+    compile:
+      hosts:
+        dummy:
+    windows:
+      hosts:
+        "192.168.2.38":
+    windows_adk:
+      hosts:
+        "192.168.2.38":

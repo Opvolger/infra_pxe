@@ -1,0 +1,12 @@
+---
+all:
+  vars:
+    docker:
+      env:
+        dhcp_range: "{{ dhcp_range_for_pxe_boot }}"
+        pxe_ip_address: "{{ ipxe.ip_address }}"
+        samba_ip_address: "{{ samba.hostname }}"
+        samba_share: "{{ samba.share }}"
+        samba_username: "{{ samba.share }}"
+        samba_password: "{{ samba.share }}"
+        volume_pxe: "{{ docker_volume_pxe }}"

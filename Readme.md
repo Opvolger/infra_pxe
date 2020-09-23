@@ -26,12 +26,20 @@ docker build -t opvolger/pxe .
 ```
 
 ipxe
+
 ```bash
 git clone git://git.ipxe.org/ipxe.git
 cd ipxe/src
 make
 make bin/undionly.kpxe
 make bin-x86_64-efi/ipxe.efi
+```
+
+docker push
+
+```bash
+docker login --username opvolger --password *************
+docker push opvolger/pxe
 ```
 
 ## TODO

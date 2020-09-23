@@ -1,0 +1,76 @@
+#!ipxe
+
+# This file has been generated, you can adjust it via the corresponding repo
+
+dhcp
+set keep-san 1
+set ipxe_server_ip ${proxydhcp/dhcp-server}
+
+console --x 1024 --y 768
+console --picture http://${ipxe_server_ip}/images/splash.png
+
+:start
+menu iPXE boot menu for ${initiator-iqn}
+item --gap --             ------------------------- Operating systems ------------------------------
+
+{% for item in boot_ipxe.menu_os_items %}
+{{ item }}
+{% endfor %}
+
+item --gap --             --------------------------------------------------------------------------
+#item --key d diskboot                 (s) Boot from first hdd
+item --gap --             ------------------------- Advanced options -------------------------------
+item --key c config       Configure settings
+item shell                Drop to iPXE shell
+item reboot               Reboot computer
+item
+item --key x exit         Exit iPXE and continue BIOS boot
+
+set samba_server_ip  {{ boot_ipxe.samba.server_ip }}
+set samba_share      {{ boot_ipxe.samba.share }}
+set samba_username   {{ boot_ipxe.samba.username }}
+set samba_password   {{ boot_ipxe.samba.password }}
+
+set menu-timeout 30000
+set menu-default {{ boot_ipxe.menu.menu_default }}
+
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+
+{% for item in boot_ipxe.menu_os_items %}
+{{ loop }}
+{{ item }}
+  boot
+  goto exit
+
+{% endfor %}
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
