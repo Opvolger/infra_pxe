@@ -1,0 +1,10 @@
+---
+all:
+  vars:
+    ipxe:
+      git:
+        version: "fe69934191ca46c4948a71f416c21dcc5a29e63a" #"v1.20.1" werkt niet
+  children:
+    compile:
+      hosts:
+        dummy:

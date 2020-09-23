@@ -1,0 +1,93 @@
+- hosts: dummy
+  gather_facts: false
+  tasks:
+    - set_fact:
+        dir_root_ipxe: "{{ playbook_dir }}/../compiled/ipxe"
+        dir_temp: "{{ playbook_dir }}/../temp"
+
+    - name: Get Source code ipxe
+      block:
+        - name: remove old compiled/ipxe code
+          file:
+            path: "{{ dir_root_ipxe }}"
+            state: absent
+
+        - name: create dir compiled/ipxe
+          file:
+            path: "{{ dir_root_ipxe }}"
+            state: directory
+
+        - block:
+            - name: Creates directory {{ dir_temp }}
+              file:
+                path: "{{ dir_temp }}"
+                state: directory
+              changed_when: false # not entirely true, but will be cleaned up again
+
+            - name: checkout git repo ipxe
+              environment:
+                TMPDIR: "{{ dir_temp }}"
+              git:
+                repo: https://github.com/ipxe/ipxe.git
+                dest: "{{ dir_root_ipxe }}"
+                force: true # code is the truth
+                version: "{{ ipxe.git.version }}"
+                accept_hostkey: yes # because it is not in known_hosts possible
+            - name: Delete directory {{ dir_temp }}
+              file:
+                path: "{{ dir_temp }}"
+                state: absent
+              changed_when: false
+          rescue:
+            - name: Delete directory {{ dir_temp }}
+              file:
+                path: "{{ dir_temp }}"
+                state: absent
+              changed_when: false
+            - fail:
+                msg: "I caught an error! check git clone checkouts"
+      delegate_to: localhost
+
+    - name: few minor changes in the source code, enable features
+      block:
+        - name: enable feature CONSOLE_CMD
+          lineinfile:
+            path: "{{ dir_root_ipxe }}/src/config/general.h"
+            regexp: '(^\/\/#define.CONSOLE_CMD)(.*)'
+            line: '#define CONSOLE_CMD\2'
+            backrefs: yes
+
+        - name: enable feature IMAGE_PNG
+          lineinfile:
+            path: "{{ dir_root_ipxe }}/src/config/general.h"
+            regexp: '(^\/\/#define.IMAGE_PNG)(.*)'
+            line: '#define IMAGE_PNG\2'
+            backrefs: yes
+
+        - name: enable feature CONSOLE_FRAMEBUFFER
+          lineinfile:
+            path: "{{ dir_root_ipxe }}/src/config/console.h"
+            regexp: '(^\/\/#define.CONSOLE_FRAMEBUFFER)(.*)'
+            line: '#define CONSOLE_FRAMEBUFFER\2'
+            backrefs: yes
+
+      delegate_to: localhost
+
+    - name: compile code
+      block:
+        - name: compile undionly.kpxe
+          shell: make bin/undionly.kpxe
+          args:
+            chdir: "{{ dir_root_ipxe }}/src/"
+          register: compile_output
+          # compile warning gives return code 2
+          failed_when: "'[FINISH]' not in compile_output.stdout"
+
+        - name: compile ipxe.efi
+          shell: make bin-x86_64-efi/ipxe.efi \n
+          args:
+            chdir: "{{ dir_root_ipxe }}/src/"
+          register: compile_output
+          # compile warning gives return code 2
+          failed_when: "'[FINISH]' not in compile_output.stdout"
+      delegate_to: localhost
