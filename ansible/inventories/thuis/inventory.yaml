@@ -12,31 +12,52 @@ all:
       menu_default: ubuntu
       menu_os_items:
         linux:
-          - name: ubuntu
+          - name_item: ubuntu
+            name_os: ubuntu
+            version: "20.04.1"
+            arch: amd64
+            iso:
+              name: ubuntu-20.04.1-desktop-amd64.iso
+              download: https://releases.ubuntu.com/20.04/ubuntu-20.04.1-desktop-amd64.iso
+              extract_to: samba
+              bootfiles:
+                - casper/vmlinuz
+                - casper/initrd
             key: u
-            text: (u) Boot Ubuntu 20.04 (64) (from samba)
+            text: (u) Boot Ubuntu 20.04.1 (64) (from samba)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/ubuntu/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/ubuntu/64  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
-              - initrd http://${ipxe_server_ip}/boot/ubuntu/initrd
+            # http://${ipxe_server_ip}/boot/{{ name_os }}/{{ version}}/{{ amd64 }} # TODO to readme
+              - kernel http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/ubuntu/64  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
+              - initrd http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/initrd
 
-          - name: ubuntu2
+          - name_item: ubuntu2
+            name_os: ubuntu
+            version: "20.04.1"
+            arch: amd64
+            # no iso here, because it already comes with the item above
             key: "2"
-            text: (2) Boot Ubuntu 20.04 (64) (from nfs)
+            text: (2) Boot Ubuntu 20.04.1 (64) (from nfs)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/ubuntu/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/ubuntu/64 NFSOPTS=vers=3 ip=dhcp
-              - initrd http://${ipxe_server_ip}/boot/ubuntu/initrd           
+              - kernel http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/ubuntu/64 NFSOPTS=vers=3 ip=dhcp
+              - initrd http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/initrd           
         windows:
-          - name: windows10setup
+          - name_item: windows10setup
+            name_os: windows
+            version: "10_home_pro_en"
+            arch: amd64
+            iso:
+              name: Windows.iso
+              extract_to: samba
             key: w
             text: (w) Boot Windows 10 Setup (from samba)
             boot_commands:
               - cpuid --ext 29 && set arch amd64 || set arch x86
               - kernel http://${ipxe_server_ip}/ipxe/wimboot
-              - initrd http://${ipxe_server_ip}/boot/windows10setup/winpeshl.ini           winpeshl.ini
-              - initrd http://${ipxe_server_ip}/boot/windows10setup/startup.ps1            startup.ps1
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD               BCD
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi          boot.sdi
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim       boot.wim
+              - initrd http://${ipxe_server_ip}/boot/windows/10_home_pro_en/amd64/winpeshl.ini           winpeshl.ini
+              - initrd http://${ipxe_server_ip}/boot/windows/10_home_pro_en/amd64/startup.ps1            startup.ps1
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD                             BCD
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi                        boot.sdi
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim                     boot.wim
 
     docker_hub_username: opvolger
     docker_hub_token: !vault |

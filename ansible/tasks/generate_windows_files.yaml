@@ -1,0 +1,18 @@
+---
+- name:  Windows script dirs
+  file:
+    path: "{{ dir_generated }}/pxe/boot/{{ item.name_os }}/{{ item.version }}/{{ item.arch }}"
+    state: directory
+  with_items: "{{ boot_ipxe.menu_os_items['windows'] }}"
+
+- name: Windows script startup.ps1
+  template: 
+    src: startup.ps1
+    dest: "{{ dir_generated }}/pxe/boot/{{ item.name_os }}/{{ item.version }}/{{ item.arch }}"
+  with_items: "{{ boot_ipxe.menu_os_items['windows'] }}"
+
+- name: Windows script files
+  copy: 
+    src: winpeshl.ini
+    dest: "{{ dir_generated }}/pxe/boot/{{ item.name_os }}/{{ item.version }}/{{ item.arch }}"
+  with_items: "{{ boot_ipxe.menu_os_items['windows'] }}"

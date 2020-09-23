@@ -12,7 +12,7 @@ console --picture http://${ipxe_server_ip}/images/splash.png
 set menu-timeout 30000
 set menu-default ubuntu
 
-chain --autofree  http://${pxehost}/ipxe/cfg/mac-${mac:hexraw}.ipxe.cfg ||
+chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe.cfg ||
 
 :start
 menu iPXE boot menu for ${initiator-iqn}
@@ -21,9 +21,9 @@ menu iPXE boot menu for ${initiator-iqn}
 {% set add_minus = 28-os_string_length %}
 
 item --gap --             ------------------------- Operating systems ({{ os }}){%for i in range(add_minus)%}-{% endfor %}
-{% for version in boot_ipxe.menu_os_items[os] %}
+{% for item in boot_ipxe.menu_os_items[os] %}
 
-item --key {{ version.key }} {{ version.name }}            {{ version.text }}
+item --key {{ item.key }} {{ item.name_item }}            {{ item.text }}
 {% endfor %}
 {% endfor %}
 item --gap --             ------------------------- Advanced options -------------------------------
@@ -47,11 +47,11 @@ goto ${selected}
 
 
 {% for os in boot_ipxe.menu_os_items %}
-{% for version in boot_ipxe.menu_os_items[os] %}
+{% for item in boot_ipxe.menu_os_items[os] %}
 
-:{{ version.name }}
-{% for n in range(version.boot_commands| length) %}
-  {{ version.boot_commands[n] }}
+:{{ item.name_item }}
+{% for n in range(item.boot_commands| length) %}
+  {{ item.boot_commands[n] }}
 {% endfor %}
   boot
   goto exit
