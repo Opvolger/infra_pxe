@@ -1,7 +1,11 @@
 ---
 all:
   vars:
+    docker_deploy:
+      volume_pxe: "/home/opvolger/pxe/volume_pxe"
+      dir: "/home/opvolger/pxe"
     recompile_ipxe: false
+    update_image: true
     wimboot:
       generate: false
       download_with_samba: true
@@ -68,7 +72,6 @@ all:
           6632653832346361380a623630353861393034313566363363653436666137613166623732653865
           35366434623265373131656335396461636363396132366639393362663764623035356235666234
           6465623536393239303366656461633636323862373461383233
-    docker_volume_pxe: "/home/opvolger/pxe/pxe"
     dhcp_range_for_pxe_boot: "192.168.2.150"
     # samba and nfs on the same nas
     nas:

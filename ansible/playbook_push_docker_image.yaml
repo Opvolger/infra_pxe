@@ -6,7 +6,7 @@
 
     - name: Create image
       block:
-        - name:
+        - name: login to docker hub and push image
           shell: |
             docker login --username {{ docker_hub_username }} --password {{ docker_hub_token  }}
             docker push opvolger/pxe

@@ -33,14 +33,15 @@ RUN sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log
 
-# ipxe files (boot files)
-RUN mkdir /pxe
+RUN mkdir /files/ipxe
 RUN mkdir -p /pxe/ipxe
-ADD files/ipxe/undionly.kpxe /pxe/ipxe
-ADD files/ipxe/ipxe.efi /pxe/ipxe
+RUN mkdir /templates
+
+# ipxe files (boot files)
+ADD files/ipxe/undionly.kpxe /files/ipxe
+ADD files/ipxe/ipxe.efi /files/ipxe
 
 # template dnsmasq only proxy dhcp (for pxe-request only)
-RUN mkdir /templates
 ADD templates/dnsmasq.conf /templates
 
 # start file for transform dnsmasq.conf

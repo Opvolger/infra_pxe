@@ -27,8 +27,10 @@
         - name: run scripts (can take some time)
           win_shell: cmd.exe /c c:\temp\set_adk_vars_and_run_powershell_script.bat
 
+        # https://superuser.com/questions/1369344/zip-file-made-in-powershell-cant-be-used-in-linux
         - name: zip a directory
-          win_shell: 'Compress-Archive -Path {{ dir_temp }}\\winpe -DestinationPath {{ dir_temp }}\\winpe.zip'
+          win_command: "\"C:\\Program Files\\7-Zip\\7z.exe\" a -tzip -o{{ dir_temp }} winpe.zip {{ dir_temp }}\\winpe"
+          #win_shell: 'Compress-Archive -Path {{ dir_temp }}\\winpe -DestinationPath {{ dir_temp }}\\winpe.zip'
           args:
             chdir: "{{ dir_temp }}"
 
@@ -44,7 +46,7 @@
             when: '"Version" not in shell_out.stdout'
 
           - name: "copy release FRB from samba-share"
-            command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../compiled/; mget winpe.zip'''
+            command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../generated/; mget winpe.zip'''
             register: release_downloaded
             no_log: True # your creds!
           delegate_to: localhost

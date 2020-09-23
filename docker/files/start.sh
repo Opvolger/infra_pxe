@@ -1,7 +1,11 @@
 #!/bin/bash
 
 mkdir -p /pxe/dnsmasq
-FILE=/pxe/ipxe/boot.ipxe
+
+# copy files to volume
+cp /files/ipxe/* /pxe/ipxe
+
+FILE=/pxe/dnsmasq/dnsmasq.conf
 if test -f "$FILE"; then
     echo "$FILE exists."
 else

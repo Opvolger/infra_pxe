@@ -6,7 +6,7 @@
 
     - name: Create image
       block:
-        - name:
+        - name: build docker image
           shell: sh build.sh
           args:
             chdir: "{{ dir_generated }}"

@@ -1,0 +1,36 @@
+- hosts: deploy
+  tasks:
+    - name: Create dir for docker-compose file
+      file:
+        path: "{{ docker_deploy.dir }}"
+        state: directory
+
+    - name: Create dir for volume_pxe
+      file:
+        path: "{{ docker_deploy.volume_pxe }}"
+        state: directory
+
+    - name: copy docker-compose file
+      copy:
+        src: '../generated/docker-compose.yaml'
+        dest: "{{ docker_deploy.dir }}"
+
+    - name: copy volume_pxe file
+      copy:
+        src: '../generated/pxe/'
+        dest: "{{ docker_deploy.volume_pxe }}"
+
+    - name: docker-compose down (maybe it is stil on?)
+      shell: docker-compose down
+      args:
+        chdir: "{{ docker_deploy.dir }}"
+
+    - name: pull opvolger/pxe:latest image
+      shell: docker pull opvolger/pxe:latest
+      args:
+        chdir: "{{ docker_deploy.dir }}"
+
+    - name: docker-compose down (maybe it is stil on?)
+      shell: docker-compose up -d
+      args:
+        chdir: "{{ docker_deploy.dir }}"

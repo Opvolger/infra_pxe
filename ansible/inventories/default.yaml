@@ -11,4 +11,4 @@ all:
         samba_username: "{{ samba.share }}"
         samba_password: "{{ samba.share }}"
       volume:
-        pxe: "{{ docker_volume_pxe }}"
+        pxe: "{{ docker_deploy.volume_pxe }}"

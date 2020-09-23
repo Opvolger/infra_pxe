@@ -20,6 +20,18 @@
             path: "{{ dir_generated }}/pxe/ipxe"
             state: directory
 
+        - name: get dir without 'appears to use backslashes as path separators'
+          shell: pwd
+          args:
+            chdir: '{{ dir_generated }}'
+          register: pwd
+
+        - name: Unarchive a file that needs to be downloaded (added in 2.0)
+          unarchive:
+            src: '{{ pwd.stdout_lines[0] }}/winpe.zip'
+            dest: '{{ pwd.stdout_lines[0] }}'
+            remote_src: yes
+
         - include_tasks: tasks/generate_windows_files.yaml
           when: boot_ipxe.menu_os_items['windows'] is defined
 
