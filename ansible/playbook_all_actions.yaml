@@ -5,3 +5,6 @@
 
 - import_playbook: playbook_create_docker_files.yaml
 
+- import_playbook: playbook_create_docker_image.yaml
+
+- import_playbook: playbook_push_docker_image.yaml
