@@ -18,4 +18,4 @@ Write-Output (Get-Date)
 
 Start-Sleep -s 15
 
-Start-Process -FilePath "S:\iso\windows10\setup.exe" -Wait
+Start-Process -FilePath "S:\iso\{{ item.name_os }}/{{ item.version }}/{{ item.arch }}\setup.exe" -Wait

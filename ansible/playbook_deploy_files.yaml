@@ -1,3 +1,4 @@
+---
 - hosts: deploy
   tasks:
     - name: Create dir for docker-compose file
@@ -20,3 +21,8 @@
         src: '../generated/pxe/'
         dest: "{{ docker_deploy.volume_pxe }}"
 
+    - name: Unarchive winpe.zip locale (to slow to copy all the files)
+      unarchive:
+        src: '{{ docker_deploy.volume_pxe }}/winpe.zip'
+        dest: '{{ docker_deploy.volume_pxe }}'
+        remote_src: yes

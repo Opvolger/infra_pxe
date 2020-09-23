@@ -20,12 +20,6 @@
             path: "{{ dir_generated }}/pxe/ipxe"
             state: directory
 
-        - name: Unarchive a file that needs to be downloaded (added in 2.0)
-          unarchive:
-            src: '{{ dir_generated }}/winpe.zip'
-            dest: '{{ dir_generated }}'
-            remote_src: yes
-
         - include_tasks: tasks/generate_windows_files.yaml
           when: boot_ipxe.menu_os_items['windows'] is defined
 
