@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  pxe:
+    image: opvolger/pxe:latest
+    network_mode: host
+    container_name: pxe
+    environment:
+      DHCP_RANGE: "{{ docker.env.dhcp_range }}"
+      PXE_IP_ADDRESS: "{{ docker.env.pxe_ip_address }}"
+    volumes:
+        - "{{ docker.volume.pxe }}":/pxe
+    restart: unless-stopped
