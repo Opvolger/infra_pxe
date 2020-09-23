@@ -7,7 +7,9 @@
     - name: Create image
       block:
         - name:
-          shell: sh build.sh
+          shell: |
+            docker login --username {{ docker_hub_username }} --password {{ docker_hub_token  }}
+            docker push opvolger/pxe
           args:
             chdir: "{{ dir_generated }}"
 

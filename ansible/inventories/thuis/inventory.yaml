@@ -1,6 +1,10 @@
 ---
 all:
   vars:
+    recompile_ipxe: false
+    wimboot:
+      generate: false
+      download_with_samba: true
     boot_ipxe:
       download_png: https://www.onlygfx.com/wp-content/uploads/2017/03/black-burst-abstract-bg.png
       samba: '{{ samba }}'
@@ -11,10 +15,20 @@ all:
           - name: ubuntu
             key: u
             text: (u) Boot Ubuntu 20.04 (64) (from samba)
+            boot_commands:
+              - kernel http://${ipxe_server_ip}/boot/ubuntu/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/ubuntu/64  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
+              - initrd http://${ipxe_server_ip}/boot/ubuntu/initrd
+
+          - name: ubuntu2
+            key: "2"
+            text: (2) Boot Ubuntu 20.04 (64) (from nfs)
+            boot_commands:
+              - kernel http://${ipxe_server_ip}/boot/ubuntu/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/ubuntu/64 NFSOPTS=vers=3 ip=dhcp
+              - initrd http://${ipxe_server_ip}/boot/ubuntu/initrd           
         windows:
           - name: windows10setup
             key: w
-            text: (1) Boot Windows 10 ----- installer .iso --- (from samba)
+            text: (w) Boot Windows 10 Setup (from samba)
             boot_commands:
               - cpuid --ext 29 && set arch amd64 || set arch x86
               - kernel http://${ipxe_server_ip}/ipxe/wimboot
@@ -23,7 +37,6 @@ all:
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD               BCD
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi          boot.sdi
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim       boot.wim
-
 
     docker_hub_username: opvolger
     docker_hub_token: !vault |
@@ -51,23 +64,22 @@ all:
     nfs:
       hostname: "{{ nas.hostname }}"
       share: "/volume1/{{ nas.share }}"
-      username: "{{ nas.username }}"
-      password: "{{ nas.password }}"
     samba:
       hostname: "{{ nas.hostname }}"
       share: "{{ nas.share }}"
       username: "{{ nas.username }}"
       password: "{{ nas.password }}"
-    add_winboot: true
-    download_with_samba: true
     ipxe:
       ip_address: "192.168.2.17"
       git:
         version: "fe69934191ca46c4948a71f416c21dcc5a29e63a" #"v1.20.1" werkt niet
   children:
+    deploy:
+      hosts:
+        "192.168.2.17":
     compile:
       hosts:
-        dummy:
+        dummy: # all to locale
     windows:
       hosts:
         "192.168.2.38":

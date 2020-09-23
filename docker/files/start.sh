@@ -1,20 +1,5 @@
 #!/bin/bash
 
-# copy boot files
-mkdir -p /pxe/ipxe
-cp /usr/share/ipxe/* /pxe/ipxe/
-
-FILE=/pxe/ipxe/boot.ipxe
-if test -f "$FILE"; then
-    echo "$FILE exists."
-else
-    echo "$FILE does not exist."
-    sed 's|{{ SAMBA_IP_ADDRESS }}|'$SAMBA_IP_ADDRESS'|g' /templates/boot.ipxe > /pxe/ipxe/boot.ipxe
-    sed -i 's|{{ SAMBA_SHARE }}|'$SAMBA_SHARE'|g' /pxe/ipxe/boot.ipxe
-    sed -i 's|{{ SAMBA_USERNAME }}|'$SAMBA_USERNAME'|g' /pxe/ipxe/boot.ipxe
-    sed -i 's|{{ SAMBA_PASSWORD }}|'$SAMBA_PASSWORD'|g' /pxe/ipxe/boot.ipxe
-fi
-
 mkdir -p /pxe/dnsmasq
 FILE=/pxe/ipxe/boot.ipxe
 if test -f "$FILE"; then

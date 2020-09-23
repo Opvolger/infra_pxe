@@ -9,16 +9,23 @@ set ipxe_server_ip ${proxydhcp/dhcp-server}
 console --x 1024 --y 768
 console --picture http://${ipxe_server_ip}/images/splash.png
 
+set menu-timeout 30000
+set menu-default ubuntu
+
+chain --autofree  http://${pxehost}/ipxe/cfg/mac-${mac:hexraw}.ipxe.cfg ||
+
 :start
 menu iPXE boot menu for ${initiator-iqn}
-item --gap --             ------------------------- Operating systems ------------------------------
+{% for os in boot_ipxe.menu_os_items %}
+{% set os_string_length = os|length %}
+{% set add_minus = 28-os_string_length %}
 
-{% for item in boot_ipxe.menu_os_items %}
-{{ item }}
+item --gap --             ------------------------- Operating systems ({{ os }}){%for i in range(add_minus)%}-{% endfor %}
+{% for version in boot_ipxe.menu_os_items[os] %}
+
+item --key {{ version.key }} {{ version.name }}            {{ version.text }}
 {% endfor %}
-
-item --gap --             --------------------------------------------------------------------------
-#item --key d diskboot                 (s) Boot from first hdd
+{% endfor %}
 item --gap --             ------------------------- Advanced options -------------------------------
 item --key c config       Configure settings
 item shell                Drop to iPXE shell
@@ -26,26 +33,31 @@ item reboot               Reboot computer
 item
 item --key x exit         Exit iPXE and continue BIOS boot
 
-set samba_server_ip  {{ boot_ipxe.samba.server_ip }}
+set samba_hostname   {{ boot_ipxe.samba.hostname }}
 set samba_share      {{ boot_ipxe.samba.share }}
 set samba_username   {{ boot_ipxe.samba.username }}
 set samba_password   {{ boot_ipxe.samba.password }}
 
-set menu-timeout 30000
-set menu-default {{ boot_ipxe.menu.menu_default }}
+set nfs_hostname   {{ boot_ipxe.nfs.hostname }}
+set nfs_share      {{ boot_ipxe.nfs.share }}
 
 choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
 set menu-timeout 0
 goto ${selected}
 
 
-{% for item in boot_ipxe.menu_os_items %}
-{{ loop }}
-{{ item }}
+{% for os in boot_ipxe.menu_os_items %}
+{% for version in boot_ipxe.menu_os_items[os] %}
+
+:{{ version.name }}
+{% for n in range(version.boot_commands| length) %}
+  {{ version.boot_commands[n] }}
+{% endfor %}
   boot
   goto exit
-
 {% endfor %}
+{% endfor %}
+
 :cancel
 echo You cancelled the menu, dropping you to a shell
 

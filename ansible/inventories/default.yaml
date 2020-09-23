@@ -1,6 +1,7 @@
 ---
 all:
   vars:
+    download_url_wimboot: https://git.ipxe.org/releases/wimboot/wimboot-latest.zip
     docker:
       env:
         dhcp_range: "{{ dhcp_range_for_pxe_boot }}"
@@ -9,4 +10,5 @@ all:
         samba_share: "{{ samba.share }}"
         samba_username: "{{ samba.share }}"
         samba_password: "{{ samba.share }}"
-        volume_pxe: "{{ docker_volume_pxe }}"
+      volume:
+        pxe: "{{ docker_volume_pxe }}"

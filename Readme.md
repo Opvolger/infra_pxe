@@ -18,12 +18,17 @@ Ideeen opgedaan met:
 - https://ipxe.org/download (compile)
 - https://github.com/ipxe/ipxe/releases <- 1.20.1 = 8f1514a
 - https://github.com/bradgillap/IPXEBOOT
+- https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html
 
 ## Build
 
 ```bash
 docker build -t opvolger/pxe .
 ```
+
+run playbook
+
+ansible-playbook playbook_create_docker_image.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt
 
 ipxe
 
