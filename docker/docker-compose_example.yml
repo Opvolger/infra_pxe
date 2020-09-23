@@ -1,0 +1,48 @@
+version: '2.1'
+
+services:
+  pxe:
+    image: opvolger/pxe:latest
+    network_mode: host
+    container_name: pxe
+    environment:
+      DHCP_RANGE: "192.168.2.150"
+      PXE_IP_ADDRESS: "192.168.2.17"
+      SAMBA_IP_ADDRESS: "192.168.2.13"
+      SAMBA_SHARE: "boot"
+      SAMBA_USERNAME: "boot"
+      SAMBA_PASSWORD: "wachtwoord"
+    ports:
+      - "8080:80"
+      - "67:67"
+      # - "5353:53" #onzin alleen voor testen
+      - "69:69"
+    volumes:
+        #- /home/opvolger/ftb/bas_speeltuin/docker/pxe/pxe:/pxe
+        - /home/opvolger/pxe/pxe:/pxe
+        #- /home/opvolger/ftb/bas_speeltuin/docker/pxe/pxe:/usr/share/nginx/html
+    restart: unless-stopped
+
+# ---
+# version: "3"
+# services:
+# #  windows10iso:
+# #    image: dreamcat4/samba-iso
+# #    container_name: windows10iso
+# #    environment:
+# #      - samba_flags=-t Europe/Amsterdam -u smb_username;smb_password;0;0; -s iso;/share/ubuntu/iso;yes;no;no;smb_username
+# #    volumes:
+# #      - /opt/docker/pxeboot/iso/Windows10.iso:/iso
+# #    restart: unless-stopped
+#   pxe:
+#     image: dreamcat4/pxe
+#     network_mode: host
+#     container_name: pxe
+#     environment:
+#       - pxe_nic=enp1s0
+#     volumes:
+#       - /opt/docker/pxeboot/pxe:/pxe
+# #    ports:
+# #      - 67:67/udp
+# #      - 69:69/udp
+#     restart: unless-stopped
