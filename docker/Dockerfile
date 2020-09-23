@@ -33,6 +33,7 @@ RUN sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log
 
+RUN mkdir /files
 RUN mkdir /files/ipxe
 RUN mkdir -p /pxe/ipxe
 RUN mkdir /templates
