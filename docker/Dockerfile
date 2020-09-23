@@ -39,6 +39,8 @@ RUN mkdir -p /pxe/ipxe
 RUN mkdir /templates
 
 # ipxe files (boot files)
+# todo version in dir
+ADD files/wimboot-2.6.0-signed/wimboot /files/wimboot
 ADD files/ipxe/undionly.kpxe /files/ipxe
 ADD files/ipxe/ipxe.efi /files/ipxe
 

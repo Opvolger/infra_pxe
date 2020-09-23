@@ -55,3 +55,5 @@ docker push opvolger/pxe
 - ipxe aan de hand van mac/machinenaam: https://www.redpill-linpro.com/sysadvent/2017/12/13/ipxe-provisioning.html
 - Controleren of ik alles heb.
 - VMware: https://ipxe.org/howto/vmware
+- uitpakken iso op samba / nfs share of dus meenemen naar docker-deploy als hij naar http moet.
+

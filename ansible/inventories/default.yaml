@@ -1,7 +1,6 @@
 ---
 all:
   vars:
-    download_url_wimboot: https://git.ipxe.org/releases/wimboot/wimboot-latest.zip
     docker:
       env:
         dhcp_range: "{{ dhcp_range_for_pxe_boot }}"

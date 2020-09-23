@@ -10,7 +10,7 @@ all:
       generate: false
       download_with_samba: true
     boot_ipxe:
-      download_png: https://www.onlygfx.com/wp-content/uploads/2017/03/black-burst-abstract-bg.png
+      download_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
       samba: '{{ samba }}'
       nfs: '{{ nfs }}'
       menu_default: ubuntu

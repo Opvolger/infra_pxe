@@ -2,6 +2,6 @@ compiled/*/*
 download/*/*
 compiled/*.zip
 ansible/group_vars/all.yaml
-docker/files/ipxe/*
+docker/files/*/*
 generated/*
 download/*
