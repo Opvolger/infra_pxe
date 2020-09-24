@@ -15,11 +15,11 @@ Function AddCabsToBootWim([string]$winpe_path)
         Remove-Item -Path ${winpe_path}\mount -Recurse -Force
     }
 
-    New-Item -ItemType Directory -Force -Path ${winpe_path}\mount
-
+    New-Item -ItemType Directory -Force -Path ${winpe_path}\mount    
     Dism /Mount-Image /ImageFile:"${winpe_path}\media\sources\boot.wim" /Index:1 /MountDir:"${winpe_path}\mount"
-
+    Copy-Item "C:\temp\winpe.jpg" -Destination "${winpe_path}\mount\Windows\System32" -Force
     $winpeocs = 'C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment\amd64\WinPE_OCs'
+
     Dism /Add-Package /Image:"${winpe_path}\mount" /PackagePath:"${winpeocs}\WinPE-WMI.cab"
     Dism /Add-Package /Image:"${winpe_path}\mount" /PackagePath:"${winpeocs}\en-us\WinPE-WMI_en-us.cab"
     Dism /Add-Package /Image:"${winpe_path}\mount" /PackagePath:"${winpeocs}\WinPE-NetFX.cab"

@@ -8,10 +8,11 @@ all:
     wimboot:
       generate: false
       download_with_samba: true
+      background_jpg: https://www.betterthanpants.com/media/catalog/product/h/a/hack-the-planet--hackers--90s-tshirt-large.jpg
     boot_ipxe:
       ip_address: "192.168.2.17"
       dhcp_range_for_pxe_boot: "192.168.2.150"
-      download_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
+      background_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
       samba: "{{ samba }}"
       nfs: "{{ nfs }}"
       menu_default: ubuntu
@@ -22,7 +23,6 @@ all:
             version: "9.11.0"
             arch: amd64
             iso:
-              name: slax-64bit-9.11.0.iso
               download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-64bit-9.11.0.iso
               boot_from_iso: yes
               bootfiles:
@@ -38,14 +38,13 @@ all:
             version: "9.11.0"
             arch: x84
             iso:
-              name: slax-32bit-9.11.0.iso
               download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-32bit-9.11.0.iso
               boot_from_iso: yes
               bootfiles:
                 - slax/boot/vmlinuz
                 - slax/boot/initrfs.img
             key: d
-            text: (d) Boot Slax 9.11.0 (64) (from http/iso)
+            text: (d) Boot Slax 9.11.0 (32) (from http/iso)
             boot_commands:
               - kernel http://${ipxe_server_ip}/boot/slax/9.11.0/x84/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
               - initrd http://${ipxe_server_ip}/boot/slax/9.11.0/x84/initrfs.img
@@ -54,7 +53,6 @@ all:
             version: "1.1.0-5"
             arch: amd64
             iso:
-              name: gparted-live-1.1.0-5-amd64.iso
               download: http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/GParted/gparted-live-1.1.0-5-amd64.iso
               bootfiles:
                 - live/vmlinuz
@@ -71,7 +69,6 @@ all:
             version: "1.1.0-5"
             arch: x86
             iso:
-              name: gparted-live-1.1.0-5-i686.iso
               download: http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/GParted/gparted-live-1.1.0-5-i686.iso
               bootfiles:
                 - live/vmlinuz
@@ -87,7 +84,6 @@ all:
             version: "20.04.1"
             arch: amd64
             iso:
-              name: ubuntu-20.04.1-desktop-amd64.iso
               download: https://releases.ubuntu.com/20.04/ubuntu-20.04.1-desktop-amd64.iso
               extract_to: samba
               bootfiles:
