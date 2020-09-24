@@ -38,8 +38,8 @@ all:
             version: "9.11.0"
             arch: x84
             iso:
-              name: slax-64bit-9.11.0.iso
-              download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-64bit-9.11.0.iso
+              name: slax-32bit-9.11.0.iso
+              download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-32bit-9.11.0.iso
               boot_from_iso: yes
               bootfiles:
                 - slax/boot/vmlinuz

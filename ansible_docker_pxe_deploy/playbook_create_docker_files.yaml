@@ -2,6 +2,8 @@
 - import_playbook: playbook_create_wimboot_files.yaml
   when: wimboot.generate | bool
 
+- import_playbook: playbook_create_linux_boot_files.yaml
+
 - hosts: deploy
   gather_facts: false
   tasks:
