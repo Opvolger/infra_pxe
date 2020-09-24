@@ -15,7 +15,7 @@ set menu-default disk
 chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe.cfg ||
 
 :start
-menu iPXE boot menu for ${initiator-iqn}
+menu iPXE boot menu for ${hostname}/${net0/mac}/${net0/ip}
 {% for os in boot_ipxe.menu_os_items %}
 {% set os_string_length = os|length %}
 {% set add_minus = 28-os_string_length %}

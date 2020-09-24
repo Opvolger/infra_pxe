@@ -20,6 +20,7 @@ Ideeen opgedaan met:
 - https://github.com/bradgillap/IPXEBOOT
 - https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html
 - https://ipxe.org/cmd
+- https://www.redpill-linpro.com/sysadvent/2017/12/13/ipxe-provisioning.html
 
 ## Build
 
@@ -57,8 +58,5 @@ docker push opvolger/pxe
 
 - NFS server in docker
 - SAMBA share in docker
-- Testen
-- ipxe aan de hand van mac/machinenaam: https://www.redpill-linpro.com/sysadvent/2017/12/13/ipxe-provisioning.html
-- Controleren of ik alles heb.
 - VMware: https://ipxe.org/howto/vmware
-- uitpakken iso op samba / nfs share of dus meenemen naar docker-deploy als hij naar http moet.
+- uitpakken iso op samba / nfs share
