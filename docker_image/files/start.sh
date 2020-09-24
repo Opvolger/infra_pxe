@@ -1,10 +1,10 @@
 #!/bin/bash
 
-mkdir -p /pxe/dnsmasq
-
-# copy files to volume
+# copy ipxe en wimboot files to volume 
 cp /files/ipxe/* /pxe/ipxe
 
+# create dnsmasq files (if nog exists)
+mkdir -p /pxe/dnsmasq
 FILE=/pxe/dnsmasq/dnsmasq.conf
 if test -f "$FILE"; then
     echo "$FILE exists."
@@ -18,5 +18,12 @@ fi
 # start nginx (background)
 nginx
 echo "nginx Started"
+
+# create sock for php
+touch /run/php-fpm/www.sock
+# start php-fpm (background)
+php-fpm
+echo "php-fpm Started"
+
 # --no0daemon zodat deze zichtbaar blijft draaien
 dnsmasq --no-daemon --conf-file=/pxe/dnsmasq/dnsmasq.conf

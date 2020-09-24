@@ -28,7 +28,13 @@ docker build -t opvolger/pxe .
 
 run playbook
 
-ansible-playbook playbook_create_docker_image.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt
+ansible-playbook playbook_all_steps.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt
+
+ansible-playbook playbook_update_docker_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt
+ansible-playbook playbook_deploy.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt
+
+
+
 
 ipxe
 

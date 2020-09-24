@@ -13,7 +13,7 @@
       args:
         chdir: "{{ docker_deploy.dir }}"
 
-    - name: docker-compose down (maybe it is stil on?)
+    - name: docker-compose up -d (start)
       shell: docker-compose up -d
       args:
         chdir: "{{ docker_deploy.dir }}"
