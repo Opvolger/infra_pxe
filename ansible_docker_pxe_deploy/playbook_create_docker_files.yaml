@@ -39,5 +39,6 @@
           get_url:
             url: "{{ boot_ipxe.background_png }}"
             dest: "{{ dir_generated }}/pxe/images/splash.png"
+            force: true
 
       delegate_to: localhost

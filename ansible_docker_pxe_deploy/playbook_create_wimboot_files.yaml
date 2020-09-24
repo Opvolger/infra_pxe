@@ -22,6 +22,7 @@
           get_url:
             url: "{{ wimboot.background_jpg }}"
             dest: "{{ dir_download }}/winpe.jpg"
+            force: true
           delegate_to: localhost
 
         - name: copy scripts
