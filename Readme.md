@@ -19,6 +19,7 @@ Ideeen opgedaan met:
 - https://github.com/ipxe/ipxe/releases <- 1.20.1 = 8f1514a
 - https://github.com/bradgillap/IPXEBOOT
 - https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html
+- https://ipxe.org/cmd
 
 ## Build
 
@@ -28,13 +29,10 @@ docker build -t opvolger/pxe .
 
 run playbook
 
-ansible-playbook playbook_all_steps.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt
+ansible-playbook playbook_all_steps.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt  --ask-become-pass --ask-pass
 
-ansible-playbook playbook_update_docker_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt
-ansible-playbook playbook_deploy.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt
-
-
-
+ansible-playbook playbook_update_docker_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
+ansible-playbook playbook_deploy.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
 
 ipxe
 
@@ -62,4 +60,3 @@ docker push opvolger/pxe
 - Controleren of ik alles heb.
 - VMware: https://ipxe.org/howto/vmware
 - uitpakken iso op samba / nfs share of dus meenemen naar docker-deploy als hij naar http moet.
-

@@ -10,7 +10,7 @@ console --x 1024 --y 768
 console --picture http://${ipxe_server_ip}/images/splash.png
 
 set menu-timeout 30000
-set menu-default ubuntu
+set menu-default disk
 
 chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe.cfg ||
 
@@ -26,6 +26,8 @@ item --gap --             ------------------------- Operating systems ({{ os }})
 item --key {{ item.key }} {{ item.name_item }}            {{ item.text }}
 {% endfor %}
 {% endfor %}
+item --gap --             --------------------------------------------------------------------------
+item --key d disk         Boot local disk
 item --gap --             ------------------------- Advanced options -------------------------------
 item --key c config       Configure settings
 item shell                Drop to iPXE shell
@@ -45,6 +47,10 @@ choose --timeout ${menu-timeout} --default ${menu-default} selected || goto canc
 set menu-timeout 0
 goto ${selected}
 
+:disk
+  sanboot --no-describe --drive 0x80
+  boot
+  exit
 
 {% for os in boot_ipxe.menu_os_items %}
 {% for item in boot_ipxe.menu_os_items[os] %}

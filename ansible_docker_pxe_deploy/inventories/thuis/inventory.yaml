@@ -3,7 +3,8 @@ all:
   vars:
     docker_deploy:
       volume_pxe: "/home/opvolger/pxe/volume_pxe"
-      dir: "/home/opvolger/pxe"    
+      dir: "/home/opvolger/pxe"
+      remove_old_dirs: false
     wimboot:
       generate: false
       download_with_samba: true
@@ -11,11 +12,76 @@ all:
       ip_address: "192.168.2.17"
       dhcp_range_for_pxe_boot: "192.168.2.150"
       download_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
-      samba: '{{ samba }}'
-      nfs: '{{ nfs }}'
+      samba: "{{ samba }}"
+      nfs: "{{ nfs }}"
       menu_default: ubuntu
       menu_os_items:
         linux:
+          - name_item: slax_64
+            name_os: slax
+            version: "9.11.0"
+            arch: amd64
+            iso:
+              name: slax-64bit-9.11.0.iso
+              download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-64bit-9.11.0.iso
+              boot_from_iso: yes
+              bootfiles:
+                - slax/boot/vmlinuz
+                - slax/boot/initrfs.img
+            key: s
+            text: (s) Boot Slax 9.11.0 (64) (from http/iso)
+            boot_commands:
+              - kernel http://${ipxe_server_ip}/boot/slax/9.11.0/amd64/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
+              - initrd http://${ipxe_server_ip}/boot/slax/9.11.0/amd64/initrfs.img
+          - name_item: slax_32
+            name_os: slax
+            version: "9.11.0"
+            arch: x84
+            iso:
+              name: slax-64bit-9.11.0.iso
+              download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-64bit-9.11.0.iso
+              boot_from_iso: yes
+              bootfiles:
+                - slax/boot/vmlinuz
+                - slax/boot/initrfs.img
+            key: d
+            text: (d) Boot Slax 9.11.0 (64) (from http/iso)
+            boot_commands:
+              - kernel http://${ipxe_server_ip}/boot/slax/9.11.0/x84/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
+              - initrd http://${ipxe_server_ip}/boot/slax/9.11.0/x84/initrfs.img
+          - name_item: gparted_64
+            name_os: gparted
+            version: "1.1.0-5"
+            arch: amd64
+            iso:
+              name: gparted-live-1.1.0-5-amd64.iso
+              download: http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/GParted/gparted-live-1.1.0-5-amd64.iso
+              bootfiles:
+                - live/vmlinuz
+                - live/initrd.img
+                - live/filesystem.squashfs
+            key: g
+            text: (g) Boot Gparted 1.1.0-5 (64) (from http/squashfs)
+            boot_commands:
+              # http://${ipxe_server_ip}/boot/{{ name_os }}/{{ version}}/{{ arch }} # TODO to readme
+              - kernel http://${ipxe_server_ip}/boot/gparted/1.1.0-5/amd64/vmlinuz sboot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=http://${ipxe_server_ip}/boot/gparted/1.1.0-5/amd64/filesystem.squashfs
+              - initrd http://${ipxe_server_ip}/boot/gparted/1.1.0-5/amd64/initrd
+          - name_item: gparted_32
+            name_os: gparted
+            version: "1.1.0-5"
+            arch: x86
+            iso:
+              name: gparted-live-1.1.0-5-i686.iso
+              download: http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/GParted/gparted-live-1.1.0-5-i686.iso
+              bootfiles:
+                - live/vmlinuz
+                - live/initrd.img
+                - live/filesystem.squashfs
+            key: h
+            text: (h) Boot Gparted 1.1.0-5 (64) (from http/squashfs)
+            boot_commands:
+              - kernel http://${ipxe_server_ip}/boot/gparted/1.1.0-5/x86/vmlinuz sboot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=http://${ipxe_server_ip}/boot/gparted/1.1.0-5/x86/filesystem.squashfs
+              - initrd http://${ipxe_server_ip}/boot/gparted/1.1.0-5/x86/initrd
           - name_item: ubuntu
             name_os: ubuntu
             version: "20.04.1"
@@ -30,8 +96,7 @@ all:
             key: u
             text: (u) Boot Ubuntu 20.04.1 (64) (from samba)
             boot_commands:
-            # http://${ipxe_server_ip}/boot/{{ name_os }}/{{ version}}/{{ amd64 }} # TODO to readme
-              - kernel http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/ubuntu/64  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
+              - kernel http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/ubuntu/20.04.1/amd64  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
               - initrd http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/initrd
 
           - name_item: ubuntu2
@@ -42,8 +107,8 @@ all:
             key: "2"
             text: (2) Boot Ubuntu 20.04.1 (64) (from nfs)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/ubuntu/64 NFSOPTS=vers=3 ip=dhcp
-              - initrd http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/initrd           
+              - kernel http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/ubuntu/20.04.1/amd64 NFSOPTS=vers=3 ip=dhcp
+              - initrd http://${ipxe_server_ip}/boot/ubuntu/20.04.1/amd64/initrd
         windows:
           - name_item: windows10setup
             name_os: windows
@@ -68,12 +133,12 @@ all:
       share: "boot"
       username: "boot"
       password: !vault |
-          $ANSIBLE_VAULT;1.2;AES256;thuis
-          37666133336534363836323032623236643537366338383739353561666332633730366365386632
-          6338313233313433616136303939333236633866313632390a613038393362326235343133383364
-          61626237313563333362376465376361326635316337376333373265663763393032306337316431
-          6237373131326534300a353438646436386535333461643738323062323263653438346534363835
-          3864
+        $ANSIBLE_VAULT;1.2;AES256;thuis
+        37666133336534363836323032623236643537366338383739353561666332633730366365386632
+        6338313233313433616136303939333236633866313632390a613038393362326235343133383364
+        61626237313563333362376465376361326635316337376333373265663763393032306337316431
+        6237373131326534300a353438646436386535333461643738323062323263653438346534363835
+        3864
     nfs:
       hostname: "{{ nas.hostname }}"
       share: "/volume1/{{ nas.share }}"
@@ -86,12 +151,6 @@ all:
     deploy:
       hosts:
         "192.168.2.17":
-    compile:
-      hosts:
-        dummy: # all to localhost
-    windows:
-      hosts:
-        "192.168.2.38":
     windows_adk:
       hosts:
         "192.168.2.38":

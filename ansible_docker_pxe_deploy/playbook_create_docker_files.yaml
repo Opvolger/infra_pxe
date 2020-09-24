@@ -2,7 +2,7 @@
 - import_playbook: playbook_create_wimboot_files.yaml
   when: wimboot.generate | bool
 
-- hosts: dummy
+- hosts: deploy
   gather_facts: false
   tasks:
     - set_fact:
@@ -20,7 +20,7 @@
             path: "{{ dir_generated }}/pxe/ipxe"
             state: directory
 
-        - include_tasks: tasks/generate_windows_files.yaml
+        - import_tasks: tasks/generate_windows_files.yaml
           when: boot_ipxe.menu_os_items['windows'] is defined
 
         - name: Create boot.ipxe

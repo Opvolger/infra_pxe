@@ -1,0 +1,47 @@
+---
+- name: Get iso
+  block:
+    - name: Get stats of iso file
+      stat:
+        path: "{{ dir_download }}/{{ linux_item.iso.name }}"
+      register: iso_file
+
+    - name: download iso
+      get_url:
+        url: "{{ linux_item.iso.download }}"
+        dest: "{{ dir_download }}/{{ linux_item.iso.name }}"
+      when: not iso_file.stat.exists
+
+  when: linux_item.iso is defined and linux_item.iso.download is defined and linux_item.iso.name is defined
+  delegate_to: localhost
+
+- name: Extract files from ISO
+  block:
+    - name: create dir compiled/ipxe
+      file:
+        path: "{{ dir_generated }}/pxe/boot/{{ linux_item.name_os }}/{{ linux_item.version }}/{{ linux_item.arch }}"
+        state: directory
+
+    - name: Extract files from ISO
+      iso_extract:
+        image: "{{ dir_download }}/{{ linux_item.iso.name }}"
+        dest: "{{ dir_generated }}/pxe/boot/{{ linux_item.name_os }}/{{ linux_item.version }}/{{ linux_item.arch }}"
+        files: "{{ linux_item.iso['bootfiles'] }}"
+
+  when: linux_item.iso is defined and linux_item.iso['bootfiles'] is defined
+  delegate_to: localhost
+
+- name: Copy ISO
+  block:
+    - name: create dir compiled/ipxe
+      file:
+        path: "{{ dir_generated }}/pxe/iso"
+        state: directory
+
+    - name: Copy iso to pxe
+      copy: 
+        src: "{{ dir_download }}/{{ linux_item.iso.name }}"
+        dest: "{{ dir_generated }}/pxe/iso/"
+      when: linux_item.iso.boot_from_iso | bool
+  when: linux_item.iso is defined and linux_item.iso.boot_from_iso is defined
+  delegate_to: localhost

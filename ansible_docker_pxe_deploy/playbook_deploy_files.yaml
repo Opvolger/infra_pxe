@@ -1,6 +1,36 @@
 ---
 - hosts: deploy
   tasks:
+    - name: Delete old files
+      block:
+
+        - name: Get stats of docker-compose.yaml
+          stat:
+            path: "{{ docker_deploy.dir }}/docker-compose.yaml"
+          register: compose_file
+
+        - name: remove old files, container must be-down
+          shell: docker-compose down
+          args:
+            chdir: "{{ docker_deploy.dir }}"
+          when: compose_file.stat.exists
+
+        - name: "remove old files in {{ docker_deploy.dir }}"
+          become: true
+          become_user: root
+          file:
+            path: "{{ docker_deploy.dir }}"
+            state: absent
+
+        - name: "remove old files in {{ docker_deploy.volume_pxe }}"
+          become: true
+          become_user: root
+          file:
+            path: "{{ docker_deploy.volume_pxe }}"
+            state: absent
+
+      when: docker_deploy.remove_old_dirs
+
     - name: Create dir for docker-compose file
       file:
         path: "{{ docker_deploy.dir }}"
@@ -26,3 +56,15 @@
         src: "{{ docker_deploy.volume_pxe }}/winpe.zip"
         dest: "{{ docker_deploy.volume_pxe }}"
         remote_src: yes
+
+    - name: enable docker-container
+      shell: docker-compose up -d
+      args:
+        chdir: "{{ docker_deploy.dir }}"
+      when: docker_deploy.remove_old_dirs
+
+    - name: restart container (ipxe files are missing)
+      shell: docker restart pxe
+      args:
+        chdir: "{{ docker_deploy.dir }}"
+      when: docker_deploy.remove_old_dirs
