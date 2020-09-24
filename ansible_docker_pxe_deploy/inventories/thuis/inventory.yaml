@@ -3,12 +3,13 @@ all:
   vars:
     docker_deploy:
       volume_pxe: "/home/opvolger/pxe/volume_pxe"
-      dir: "/home/opvolger/pxe"
-    recompile_ipxe: false
+      dir: "/home/opvolger/pxe"    
     wimboot:
       generate: false
       download_with_samba: true
     boot_ipxe:
+      ip_address: "192.168.2.17"
+      dhcp_range_for_pxe_boot: "192.168.2.150"
       download_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
       samba: '{{ samba }}'
       nfs: '{{ nfs }}'
@@ -61,7 +62,6 @@ all:
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD                             BCD
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi                        boot.sdi
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim                     boot.wim
-    dhcp_range_for_pxe_boot: "192.168.2.150"
     # samba and nfs on the same nas
     nas:
       hostname: "192.168.2.13"
@@ -82,10 +82,6 @@ all:
       share: "{{ nas.share }}"
       username: "{{ nas.username }}"
       password: "{{ nas.password }}"
-    ipxe:
-      ip_address: "192.168.2.17"
-      git:
-        version: "fe69934191ca46c4948a71f416c21dcc5a29e63a" #"v1.20.1" werkt niet
   children:
     deploy:
       hosts:

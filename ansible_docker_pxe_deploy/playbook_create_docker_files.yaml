@@ -11,9 +11,9 @@
     - name: Generate files
       block:
         - name: Crete docker-compose.yaml
-          template: 
+          template:
             src: docker-compose.yaml
-            dest: '{{ dir_generated }}'
+            dest: "{{ dir_generated }}"
 
         - name: create dir images
           file:
@@ -24,9 +24,9 @@
           when: boot_ipxe.menu_os_items['windows'] is defined
 
         - name: Create boot.ipxe
-          template: 
+          template:
             src: boot.ipxe
-            dest: '{{ dir_generated }}/pxe/ipxe'
+            dest: "{{ dir_generated }}/pxe/ipxe"
 
         - name: create dir images
           file:
@@ -36,7 +36,6 @@
         - name: download image
           get_url:
             url: "{{ boot_ipxe.download_png }}"
-            dest: '{{ dir_generated }}/pxe/images/splash.png'
+            dest: "{{ dir_generated }}/pxe/images/splash.png"
 
       delegate_to: localhost
-

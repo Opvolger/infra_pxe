@@ -1,3 +1,4 @@
+---
 - import_playbook: playbook_deploy_files.yaml
 
 - hosts: deploy

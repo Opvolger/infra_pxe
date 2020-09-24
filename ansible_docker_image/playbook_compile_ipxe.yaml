@@ -82,7 +82,7 @@
             creates: "{{ dir_root_ipxe }}/src/bin/undionly.kpxe"
           register: compile_output
           # compile warning gives return code 2
-          failed_when: "'[FINISH]' not in compile_output.stdout"          
+          failed_when: "'[FINISH]' not in compile_output.stdout"
 
         - name: compile ipxe.efi
           shell: make bin-x86_64-efi/ipxe.efi \n
@@ -91,5 +91,5 @@
             creates: "{{ dir_root_ipxe }}/src/bin-x86_64-efi/ipxe.efi"
           register: compile_output
           # compile warning gives return code 2
-          failed_when: "'[FINISH]' not in compile_output.stdout"          
+          failed_when: "'[FINISH]' not in compile_output.stdout"
       delegate_to: localhost

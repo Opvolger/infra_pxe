@@ -1,19 +1,20 @@
+---
 # create wimboot
 # This windows machine must gave installed Windows ADK and Windows PE add-on for the ADK!!!
 # https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install
 # enable winrm on Windows machine `Enable-PSRemoting -Force`
-- hosts: windows_adk  
+- hosts: windows_adk
   gather_facts: true
   tasks:
     - name: generate wimboot
-      block:      
+      block:
         - set_fact:
             dir_temp: "c:\\temp"
             dir_generated: "{{ playbook_dir }}/../generated"
 
         - name: create temp dir
           win_file:
-            path: '{{ dir_temp }}'
+            path: "{{ dir_temp }}"
             state: directory
 
         - name: copy scripts
@@ -36,19 +37,19 @@
 
         - name: "Download with samba"
           block:
-          - name: Check if samba-client is installed
-            shell: smbclient --version
-            register: shell_out
+            - name: Check if samba-client is installed
+              shell: smbclient --version
+              register: shell_out
 
-          - name: Fail is samba-client is not installed
-            fail:
-              msg: "aborting, samba-client isn't installed. Install it with your favorite package manager"
-            when: '"Version" not in shell_out.stdout'
+            - name: Fail is samba-client is not installed
+              fail:
+                msg: "aborting, samba-client isn't installed. Install it with your favorite package manager"
+              when: '"Version" not in shell_out.stdout'
 
-          - name: "copy release FRB from samba-share"
-            command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../generated/; mget winpe.zip'''
-            register: release_downloaded
-            no_log: True # your creds!
+            - name: "copy release FRB from samba-share"
+              command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../generated/; mget winpe.zip'''
+              register: release_downloaded
+              no_log: True # your creds!
           delegate_to: localhost
           when: wimboot.download_with_samba | bool
 

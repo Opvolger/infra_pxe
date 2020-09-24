@@ -1,8 +1,0 @@
----
-# first compile the ipxe code
-- import_playbook: playbook_compile_ipxe.yaml
-  when: recompile_ipxe | bool
-
-- import_playbook: playbook_create_docker_files.yaml
-
-- import_playbook: playbook_deploy.yaml
