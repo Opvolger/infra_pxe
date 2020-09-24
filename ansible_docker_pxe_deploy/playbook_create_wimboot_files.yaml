@@ -20,14 +20,14 @@
 
         - name: download image
           get_url:
-            url: "{{ boot_ipxe.background_png }}"
+            url: "{{ wimboot.background_jpg }}"
             dest: "{{ dir_download }}/winpe.jpg"
           delegate_to: localhost
 
         - name: copy scripts
           win_copy:
             src: "{{ item }}"
-            dest: '{{ dir_temp }}\{{ item }}'
+            dest: '{{ dir_temp }}\{{ item | basename }}'
           with_items:
             - "{{ dir_download }}/winpe.jpg"
             - set_adk_vars_and_run_powershell_script.bat
