@@ -55,7 +55,7 @@
               when: '"Version" not in shell_out.stdout'
 
             - name: "copy release FRB from samba-share"
-              command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../generated/; mget winpe.zip'''
+              command: 'smbclient ''\\{{ inventory_hostname }}\c$'' -U ''{{ ansible_user }}''%{{ ansible_password }} -c ''prompt OFF; recurse ON; cd "temp"; lcd {{ playbook_dir }}/../generated/pxe/; mget winpe.zip'''
               register: release_downloaded
               no_log: True # your creds!
           delegate_to: localhost

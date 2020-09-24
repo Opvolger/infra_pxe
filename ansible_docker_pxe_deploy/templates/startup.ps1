@@ -1,8 +1,6 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $ProgressPreference = 'SilentlyContinue'
 
-Start-Sleep -s 15
-
 $hostname = "{{ boot_ipxe.samba.hostname }}"
 $share = "{{ boot_ipxe.samba.share }}"
 $username = "{{ boot_ipxe.samba.username }}"
@@ -17,5 +15,8 @@ net use s: \\${hostname}\${share} $password /user:WORKGROUP\$username
 Write-Output (Get-Date)
 
 Start-Sleep -s 15
+
+$shell = New-Object -ComObject "Shell.Application"
+$shell.minimizeall()
 
 Start-Process -FilePath "S:\iso\{{ item.name_os }}/{{ item.version }}/{{ item.arch }}\setup.exe" -Wait

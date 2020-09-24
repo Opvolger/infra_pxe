@@ -60,3 +60,4 @@ docker push opvolger/pxe
 - SAMBA share in docker
 - VMware: https://ipxe.org/howto/vmware
 - uitpakken iso op samba / nfs share
+- niet uitpakken winpe.zip als hij er niet is... (alleen linux boot menu)

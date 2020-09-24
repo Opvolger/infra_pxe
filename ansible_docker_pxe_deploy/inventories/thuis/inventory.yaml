@@ -8,7 +8,7 @@ all:
     wimboot:
       generate: false
       download_with_samba: true
-      background_jpg: https://www.betterthanpants.com/media/catalog/product/h/a/hack-the-planet--hackers--90s-tshirt-large.jpg
+      background_jpg: http://opvolger.net/winpe.jpg
     boot_ipxe:
       ip_address: "192.168.2.17"
       dhcp_range_for_pxe_boot: "192.168.2.150"
