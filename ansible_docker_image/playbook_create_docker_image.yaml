@@ -2,7 +2,7 @@
   gather_facts: false
   tasks:
     - set_fact:
-        dir_generated: "{{ playbook_dir }}/../docker"
+        dir_generated: "{{ playbook_dir }}/../docker_image"
 
     - name: Create image
       block:

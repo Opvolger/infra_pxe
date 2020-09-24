@@ -5,10 +5,4 @@
 
 - import_playbook: playbook_create_docker_files.yaml
 
-- import_playbook: playbook_create_docker_image.yaml
-  when: update_image | bool
-
-- import_playbook: playbook_push_docker_image.yaml
-  when: update_image | bool
-
 - import_playbook: playbook_deploy.yaml
