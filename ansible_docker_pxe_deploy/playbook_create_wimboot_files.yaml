@@ -64,6 +64,6 @@
         - name: get zip (very slow 30m+ big file and winrm!)
           fetch:
             src: "{{ dir_temp }}\\winpe.zip"
-            dest: "{{ dir_generated }}/winpe.zip"
+            dest: "{{ dir_generated }}/pxe/winpe.zip"
             flat: yes
           when: not wimboot.download_with_samba | bool
