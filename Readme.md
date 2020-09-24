@@ -21,6 +21,9 @@ Ideeen opgedaan met:
 - https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html
 - https://ipxe.org/cmd
 - https://www.redpill-linpro.com/sysadvent/2017/12/13/ipxe-provisioning.html
+- https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/winpe-mount-and-customize#addwallpaper
+
+dism /Cleanup-Mountpoints
 
 ## Build
 

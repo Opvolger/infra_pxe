@@ -16,7 +16,4 @@ Write-Output (Get-Date)
 
 Start-Sleep -s 15
 
-$shell = New-Object -ComObject "Shell.Application"
-$shell.minimizeall()
-
 Start-Process -FilePath "S:\iso\{{ item.name_os }}/{{ item.version }}/{{ item.arch }}\setup.exe" -Wait
