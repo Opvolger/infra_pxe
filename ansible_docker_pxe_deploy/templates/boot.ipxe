@@ -15,7 +15,7 @@ set menu_default {{ boot_ipxe.menu_default }}
 chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe ||
 
 :start
-menu iPXE boot menu for hostname: ${hostname} mac: ${net0/mac} ip: ${net0/ip}
+menu iPXE boot menu for hostname: ${hostname} domain: ${domain} mac: ${net0/mac} ip: ${net0/ip}
 {% for os in boot_ipxe.menu_os_items %}
 {% set os_string_length = os|length %}
 {% set add_minus = 28-os_string_length %}
