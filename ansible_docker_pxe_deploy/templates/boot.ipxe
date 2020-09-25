@@ -9,8 +9,8 @@ set ipxe_server_ip ${proxydhcp/dhcp-server}
 console --x 1024 --y 768
 console --picture http://${ipxe_server_ip}/images/splash.png
 
-set menu-timeout 30000
-set menu-default disk
+set menu_timeout 30000
+set menu_default {{ boot_ipxe.menu_default }}
 
 chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe ||
 
@@ -43,8 +43,8 @@ set samba_password   {{ boot_ipxe.samba.password }}
 set nfs_hostname   {{ boot_ipxe.nfs.hostname }}
 set nfs_share      {{ boot_ipxe.nfs.share }}
 
-choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
-set menu-timeout 0
+choose --timeout ${menu_timeout} --default ${menu_default} selected || goto cancel
+
 goto ${selected}
 
 :disk
@@ -59,7 +59,9 @@ goto ${selected}
   set name_os {{ item.name_os }}
   set version {{ item.version }}
   set arch {{ item.arch }}
-  set http-location http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
+  set http_location http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
+  set samba_location //${samba_hostname}/${samba_share}/iso/${name_os}/${version}/${arch}
+  set nfs_location ${nfs_hostname}:${nfs_share}/iso/${name_os}/${version}/${arch}
 {% for n in range(item.boot_commands| length) %}
   {{ item.boot_commands[n] }}
 {% endfor %}

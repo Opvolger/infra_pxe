@@ -1,0 +1,25 @@
+---
+- hosts: deploy
+  tasks:
+    - name: Generate files
+      block:
+        - name: create dir images
+          file:
+            path: "../generated/pxe/ipxe"
+            state: directory
+
+        - name: Create boot.ipxe
+          template:
+            src: boot.ipxe
+            dest: "../generated/pxe/ipxe"
+      delegate_to: localhost
+
+    - name: Create dir for volume_pxe
+      file:
+        path: "{{ docker_deploy.volume_pxe }}"
+        state: directory
+
+    - name: copy volume_pxe file
+      copy:
+        src: "../generated/pxe/ipxe/boot.ipxe"
+        dest: "{{ docker_deploy.volume_pxe }}/ipxe/boot.ipxe"
