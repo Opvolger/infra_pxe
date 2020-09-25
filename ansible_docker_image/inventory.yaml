@@ -2,9 +2,10 @@
 all:
   vars:
     ipxe:
-      recompile: false
+      wimboot:
+        version: "2.6.0"
       git:
-        version: "fe69934191ca46c4948a71f416c21dcc5a29e63a" #"v1.20.1" werkt niet
+        hash: "fe69934191ca46c4948a71f416c21dcc5a29e63a" #"v1.20.1" werkt niet
     docker_hub_username: opvolger
     docker_hub_token: !vault |
       $ANSIBLE_VAULT;1.2;AES256;thuis

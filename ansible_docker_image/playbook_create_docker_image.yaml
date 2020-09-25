@@ -7,7 +7,7 @@
     - name: Create image
       block:
         - name: build docker image
-          shell: sh build.sh
+          shell: docker build . --build-arg GIT_HASH={{ ipxe.git.hash }} --build-arg WIMBOOT_VERSION={{ ipxe.wimboot.version }}
           args:
             chdir: "{{ dir_generated }}"
 
