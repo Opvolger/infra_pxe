@@ -12,10 +12,10 @@ console --picture http://${ipxe_server_ip}/images/splash.png
 set menu-timeout 30000
 set menu-default disk
 
-chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe.cfg ||
+chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe ||
 
 :start
-menu iPXE boot menu for ${hostname}/${net0/mac}/${net0/ip}
+menu iPXE boot menu for hostname: ${hostname} mac: ${net0/mac} ip: ${net0/ip}
 {% for os in boot_ipxe.menu_os_items %}
 {% set os_string_length = os|length %}
 {% set add_minus = 28-os_string_length %}
@@ -56,6 +56,9 @@ goto ${selected}
 {% for item in boot_ipxe.menu_os_items[os] %}
 
 :{{ item.name_item }}
+  set name_os {{ item.name_os }}
+  set version {{ item.version }}
+  set arch {{ item.arch }}
 {% for n in range(item.boot_commands| length) %}
   {{ item.boot_commands[n] }}
 {% endfor %}
