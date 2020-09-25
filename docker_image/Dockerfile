@@ -1,8 +1,7 @@
 FROM centos:8
 
-RUN yum -y check-update || { rc=$?; [ "$rc" -eq 100 ] && exit 0; exit "$rc"; }
-
-RUN yum update -y && yum install -y dnsmasq nginx php-fpm php-common php-cli && yum clean all;
+#update default image and install latest packages
+RUN yum update -y && yum install -y dnsmasq nginx php-fpm php-common php-cli && yum clean all && rm /var/cache/yum -Rf
 
 # default env
 ENV DHCP_RANGE=192.168.2.150
@@ -12,16 +11,14 @@ ENV PXE_IP_ADDRESS=192.168.2.17
 EXPOSE 80 67 67/udp 69 69/udp
 
 # Change html folder from /www to /pxe
-# && Enable autoindex (file browsing)
-RUN sed -i -e 's|/usr/share/nginx/html;|/pxe;|' /etc/nginx/nginx.conf \
-    && sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf
+RUN sed -i -e 's|/usr/share/nginx/html;|/pxe;|' /etc/nginx/nginx.conf
 
 # nginx logging to stdout en stderr (logging docker)
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # create dirs
-RUN mkdir /files && mkdir /files/ipxe && mkdir -p /pxe/ipxe && mkdir /templates && mkdir /run/php-fpm
+RUN mkdir -p /files/ipxe /pxe/ipxe /templates /run/php-fpm
 
 # ipxe files (boot files)
 # todo version in dir
@@ -33,11 +30,9 @@ ADD files/ipxe/ipxe.efi /files/ipxe
 ADD templates/dnsmasq.conf /templates
 
 # start file for transform dnsmasq.conf
-ADD files/start.sh /
-
-RUN chmod +x /start.sh
+ADD files/start.sh /root
 
 # volume for all the files
 VOLUME /pxe
 
-CMD ["./start.sh"]
+CMD ["/bin/bash", "/root/start.sh"]
