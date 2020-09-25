@@ -59,6 +59,7 @@ goto ${selected}
   set name_os {{ item.name_os }}
   set version {{ item.version }}
   set arch {{ item.arch }}
+  set http-location http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
 {% for n in range(item.boot_commands| length) %}
   {{ item.boot_commands[n] }}
 {% endfor %}

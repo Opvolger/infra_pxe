@@ -12,6 +12,7 @@ all:
     boot_ipxe:
       ip_address: "192.168.2.17"
       dhcp_range_for_pxe_boot: "192.168.2.150"
+      # background_png: https://pc-freak.net/penguins/tux-003-1024x768.png
       background_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
       samba: "{{ samba }}"
       nfs: "{{ nfs }}"
@@ -31,8 +32,8 @@ all:
             key: s
             text: (s) Boot Slax 9.11.0 (64) (from http/iso)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/slax/9.11.0/amd64/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
-              - initrd http://${ipxe_server_ip}/boot/slax/9.11.0/amd64/initrfs.img
+              - kernel ${http-location}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
+              - initrd ${http-location}/initrfs.img
           - name_item: slax_32
             name_os: slax
             version: "9.11.0"
@@ -46,8 +47,8 @@ all:
             key: d
             text: (d) Boot Slax 9.11.0 (32) (from http/iso)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/initrfs.img
+              - kernel ${http-location}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
+              - initrd ${http-location}/initrfs.img
           - name_item: gparted_64
             name_os: gparted
             version: "1.1.0-5"
@@ -61,8 +62,8 @@ all:
             key: g
             text: (g) Boot Gparted 1.1.0-5 (64) (from http/squashfs)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/vmlinuz sboot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/filesystem.squashfs
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/initrd
+              - kernel ${http-location}/vmlinuz sboot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/filesystem.squashfs
+              - initrd ${http-location}/initrd
           - name_item: gparted_32
             name_os: gparted
             version: "1.1.0-5"
@@ -76,8 +77,8 @@ all:
             key: h
             text: (h) Boot Gparted 1.1.0-5 (64) (from http/squashfs)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/vmlinuz sboot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/filesystem.squashfs
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/initrd
+              - kernel ${http-location}/vmlinuz sboot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/filesystem.squashfs
+              - initrd ${http-location}/initrd
           - name_item: ubuntu
             name_os: ubuntu
             version: "20.04.1"
@@ -91,8 +92,8 @@ all:
             key: u
             text: (u) Boot Ubuntu 20.04.1 (64) (from samba)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/${name_os}/${version}/${arch}  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/initrd
+              - kernel ${http-location}/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=//${samba_hostname}/${samba_share}/iso/${name_os}/${version}/${arch}  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
+              - initrd ${http-location}/initrd
 
           - name_item: ubuntu2
             name_os: ubuntu
@@ -102,8 +103,8 @@ all:
             key: "2"
             text: (2) Boot Ubuntu 20.04.1 (64) (from nfs)
             boot_commands:
-              - kernel http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/${name_os}/${version}/${arch} NFSOPTS=vers=3 ip=dhcp
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/initrd
+              - kernel ${http-location}/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_hostname}:${nfs_share}/iso/${name_os}/${version}/${arch} NFSOPTS=vers=3 ip=dhcp
+              - initrd ${http-location}/initrd
         windows:
           - name_item: windows10setup
             name_os: windows
@@ -117,11 +118,11 @@ all:
             boot_commands:
               - cpuid --ext 29 && set arch amd64 || set arch x86
               - kernel http://${ipxe_server_ip}/ipxe/wimboot
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/winpeshl.ini           winpeshl.ini
-              - initrd http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}/startup.ps1            startup.ps1
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD                             BCD
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi                        boot.sdi
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim                     boot.wim
+              - initrd ${http-location}/winpeshl.ini                                  winpeshl.ini
+              - initrd ${http-location}/startup.ps1                                   startup.ps1
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD          BCD
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi     boot.sdi
+              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim  boot.wim
     # samba and nfs on the same nas
     nas:
       hostname: "192.168.2.13"
