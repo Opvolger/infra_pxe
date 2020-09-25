@@ -21,7 +21,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # create dirs
-RUN mkdir /files && mkdir /files/ipxe && mkdir -p /pxe/ipxe && mkdir /templates && mkdir /run/php-fpm
+RUN mkdir -p /files/ipxe /pxe/ipxe /templates /run/php-fpm
 
 # ipxe files (boot files)
 # todo version in dir
