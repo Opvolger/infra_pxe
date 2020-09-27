@@ -30,6 +30,7 @@ item --gap --             ------------------------------------------------------
 item --key d disk         Boot local disk
 item --gap --             ------------------------- Advanced options -------------------------------
 item --key c config       Configure settings
+item --key t external     (T)  External Linux Installs http://boot.salstar.sk/
 item shell                Drop to iPXE shell
 item reboot               Reboot computer
 item
@@ -54,6 +55,10 @@ goto ${selected}
 
 {% for os in boot_ipxe.menu_os_items %}
 {% for item in boot_ipxe.menu_os_items[os] %}
+
+:external
+  chain http://boot.salstar.sk || goto failed
+  goto exit
 
 :{{ item.name_item }}
   set name_os {{ item.name_os }}

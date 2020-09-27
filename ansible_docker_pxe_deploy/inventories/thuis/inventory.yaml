@@ -32,7 +32,7 @@ all:
             key: s
             text: (s) Boot Slax 9.11.0 (64) (from http/iso)
             boot_commands:
-              - kernel ${http_location}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
+              - kernel ${http_location}/vmlinuz nameserver=192.168.2.254 vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
               - initrd ${http_location}/initrfs.img
           - name_item: slax_32
             name_os: slax
@@ -47,7 +47,7 @@ all:
             key: d
             text: (d) Boot Slax 9.11.0 (32) (from http/iso)
             boot_commands:
-              - kernel ${http_location}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
+              - kernel ${http_location}/vmlinuz nameserver=192.168.2.254 vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
               - initrd ${http_location}/initrfs.img
           - name_item: gparted_64
             name_os: gparted
@@ -62,7 +62,7 @@ all:
             key: g
             text: (g) Boot Gparted 1.1.0-5 (64) (from http/squashfs)
             boot_commands:
-              - kernel ${http_location}/vmlinuz boot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=${http_location}/filesystem.squashfs
+              - kernel ${http_location}/vmlinuz boot=live config components union=overlay username=user noswap noeject ip=dhcp vga=788 fetch=${http_location}/filesystem.squashfs
               - initrd ${http_location}/initrd.img
           - name_item: gparted_32
             name_os: gparted
@@ -77,7 +77,7 @@ all:
             key: h
             text: (h) Boot Gparted 1.1.0-5 (32) (from http/squashfs)
             boot_commands:
-              - kernel ${http_location}/vmlinuz boot=live config components union=overlay username=user noswap noeject ip= vga=788 fetch=${http_location}/filesystem.squashfs
+              - kernel ${http_location}/vmlinuz boot=live config components union=overlay username=user noswap noeject ip=dhcp vga=788 fetch=${http_location}/filesystem.squashfs
               - initrd ${http_location}/initrd.img
           - name_item: ubuntu
             name_os: ubuntu
@@ -94,7 +94,6 @@ all:
             boot_commands:
               - kernel ${http_location}/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=${samba_location}  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
               - initrd ${http_location}/initrd
-
           - name_item: ubuntu2
             name_os: ubuntu
             version: "20.04.1"
@@ -105,6 +104,29 @@ all:
             boot_commands:
               - kernel ${http_location}/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_location} NFSOPTS=vers=3 ip=dhcp
               - initrd ${http_location}/initrd
+          - name_item: manjaro_kde_64
+            name_os: manjaro
+            version: "20.04.1"
+            arch: amd64
+            iso:
+              download: https://osdn.net/projects/manjaro/storage/kde/20.1/manjaro-kde-20.1-200911-linux58.iso
+              extract_to: nfs
+              bootfiles:
+                - boot/vmlinuz-x86_64
+                - boot/intel_ucode.img
+                - boot/amd_ucode.img
+                - boot/initramfs-x86_64.img
+            # no iso here, because it already comes with the item above
+            key: "m"
+            text: (m) Boot Manjaro 20.1 (64) (from nfs)
+            boot_commands:
+            # https://wiki.archlinux.org/index.php/Preboot_Execution_Environment#Transferring_archiso_root_filesystem
+            # https://github.com/manjaro/manjaro-tools/issues/84
+              - kernel ${http_location}/vmlinuz-x86_64 archisobasedir=manjaro archiso_nfs_srv=${nfs_location} ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
+              #- kernel ${http_location}/vmlinuz-x86_64 archisobasedir=manjaro archiso_http_srv=${nfs_location} ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
+              - initrd ${http_location}/intel_ucode.img 
+              - initrd ${http_location}/amd_ucode.img 
+              - initrd ${http_location}/initramfs-x86_64.img
         windows:
           - name_item: windows10setup
             name_os: windows

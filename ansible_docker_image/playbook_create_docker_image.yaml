@@ -7,7 +7,7 @@
     - name: Create image
       block:
         - name: build docker image
-          shell: docker build . --build-arg GIT_HASH={{ ipxe.git.hash }} --build-arg WIMBOOT_VERSION={{ ipxe.wimboot.version }}
+          shell: docker build -t opvolger/pxe . --build-arg GIT_HASH={{ ipxe.git.hash }} --build-arg WIMBOOT_VERSION={{ ipxe.wimboot.version }}
           args:
             chdir: "{{ dir_generated }}"
 
