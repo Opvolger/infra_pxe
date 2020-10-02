@@ -43,6 +43,11 @@
 
     - name: copy docker-compose file
       copy:
+        src: "../generated/.env"
+        dest: "{{ docker_deploy.dir }}"
+
+    - name: copy docker-compose file
+      copy:
         src: "../generated/docker-compose.yaml"
         dest: "{{ docker_deploy.dir }}"
 

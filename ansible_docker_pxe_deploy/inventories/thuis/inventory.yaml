@@ -32,7 +32,7 @@ all:
             key: s
             text: (s) Boot Slax 9.11.0 (64) (from http/iso)
             boot_commands:
-              - kernel ${http_location}/vmlinuz nameserver=192.168.2.254 vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
+              - kernel ${http_location}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
               - initrd ${http_location}/initrfs.img
           - name_item: slax_32
             name_os: slax
@@ -47,7 +47,7 @@ all:
             key: d
             text: (d) Boot Slax 9.11.0 (32) (from http/iso)
             boot_commands:
-              - kernel ${http_location}/vmlinuz nameserver=192.168.2.254 vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
+              - kernel ${http_location}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
               - initrd ${http_location}/initrfs.img
           - name_item: gparted_64
             name_os: gparted

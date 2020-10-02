@@ -12,8 +12,13 @@
 
     - name: Generate files
       block:
-        - name: Crete docker-compose.yaml
+        - name: Create .env
           template:
+            src: .env
+            dest: "{{ dir_generated }}"
+
+        - name: Copy docker-compose.yaml
+          copy:
             src: docker-compose.yaml
             dest: "{{ dir_generated }}"
 
