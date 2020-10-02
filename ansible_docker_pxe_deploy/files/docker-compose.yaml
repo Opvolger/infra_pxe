@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   pxe:
-    image: opvolger/pxe:latest
+    image: opvolger/pxe:${DOCKER_PXE_TAG}
     network_mode: host
     container_name: pxe
     environment:

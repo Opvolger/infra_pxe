@@ -2,6 +2,8 @@
 all:
   vars:
     docker:
+      images:
+        tag: latest
       env:
         dhcp_range: "{{ boot_ipxe.dhcp_range_for_pxe_boot }}"
         pxe_ip_address: "{{ boot_ipxe.ip_address }}"
