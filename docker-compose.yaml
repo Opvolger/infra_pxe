@@ -1,3 +1,5 @@
+---
+# build "straat" zal hier nog moeten verdwijnen.
 version: "3"
 
 services:
@@ -5,8 +7,6 @@ services:
     image: opvolger/dind:latest
     privileged: true
     container_name: dind
-    # volumes:
-    #   - ./data:/var/lib/docker
     ports:
       - "10022:22"
     networks:

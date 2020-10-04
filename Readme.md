@@ -33,8 +33,6 @@ docker build -t opvolger/pxe .
 
 run playbook
 
-ansible-playbook playbook_all_steps.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt  --ask-become-pass --ask-pass
-
 ansible-playbook playbook_create_jenkins_job.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt
 
 ansible-playbook playbook_create_wimboot_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
