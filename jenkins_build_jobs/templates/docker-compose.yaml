@@ -25,4 +25,3 @@ services:
       - "50000:50000"
     environment:
       JAVA_OPTS: -Djenkins.install.runSetupWizard=false -Dhudson.footerURL=http://opvolger.eu
-      JENKINS_OPTS: "--argumentsRealm.roles.user={{ jenkins.username }} --argumentsRealm.passwd.admin={{ jenkins.password }} --argumentsRealm.roles.admin=admin"
