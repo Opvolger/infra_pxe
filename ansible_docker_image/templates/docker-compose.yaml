@@ -1,0 +1,28 @@
+---
+# build "straat" zal hier nog moeten verdwijnen.
+version: "3"
+
+services:
+  # todo erg link [0], nog iets moois maken hier
+  dind:
+    image: opvolger/dind:latest
+    privileged: true
+    container_name: "{{ jenkins.slaves[0].name }}"
+    ports:
+      - "10022:22"
+    networks:
+      default:
+        aliases:
+          - "{{ jenkins.slaves[0].hostname }}"
+    environment:
+      USER: "{{ jenkins.slaves[0].username }}"
+      PASSWORD: "{{ jenkins.slaves[0].password }}"
+  jenkins:
+    image: opvolger/jenkins:latest
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    environment:
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false -Dhudson.footerURL=http://opvolger.eu
+      JENKINS_OPTS: "--argumentsRealm.roles.user={{ jenkins.username }} --argumentsRealm.passwd.admin={{ jenkins.password }} --argumentsRealm.roles.admin=admin"
