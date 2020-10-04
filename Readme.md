@@ -33,7 +33,15 @@ docker build -t opvolger/pxe .
 
 run playbook
 
-ansible-playbook playbook_create_jenkins_job.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt
+```bash
+cd jenkins_build_jobs
+# create docker-compose for jenkins-server and slave (docker)
+ansible-playbook playbook_create_jenkins_compose.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
+# configure jenkins add-slave auth. + don't allow anonymous login
+ansible-playbook playbook_configure_jenkins.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
+# configure jobs
+ansible-playbook playbook_configure_jenkins_jobs.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
+```
 
 ansible-playbook playbook_create_wimboot_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
 

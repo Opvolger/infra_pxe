@@ -2,26 +2,9 @@
   gather_facts: false
   tasks:
     - block:
-        - name: Add folder in jenkins
+        - name: Setup Jenkins
           jenkins_script:
             script: "{{ lookup('template', 'templates/setup_admin.groovy') }}"
-            user: "{{ jenkins.username }}"
-            password: "{{ jenkins.password }}"
-            url: "{{ jenkins.url }}"
-
-        - name: Add folder in jenkins
-          jenkins_script:
-            script: "{{ lookup('template', 'templates/add_folder.groovy') }}"
-            user: "{{ jenkins.username }}"
-            password: "{{ jenkins.password }}"
-            url: "{{ jenkins.url }}"
-          vars:
-            folder: INFRA
-
-        - name: Create a jenkins job using basic authentication
-          community.general.jenkins_job:
-            config: "{{ lookup('template', 'templates/jenkins_job_docker_pxe.xml') }}"
-            name: "INFRA/Build_docker_image_opvolger-pxe"
             user: "{{ jenkins.username }}"
             password: "{{ jenkins.password }}"
             url: "{{ jenkins.url }}"
@@ -48,15 +31,4 @@
             password: "{{ jenkins.password }}"
             url: "{{ jenkins.url }}"
 
-        - name: Secret voor dockerhub
-          jenkins_script:
-            script: "{{ lookup('template', 'templates/add_creds_username_password.groovy') }}"
-            user: "{{ jenkins.username }}"
-            password: "{{ jenkins.password }}"
-            url: "{{ jenkins.url }}"
-          vars:
-            username: "{{ docker_hub_username }}"
-            secret: "{{ docker_hub_token }}"
-            id: "dockerhub"
-            description: "Creds for docker-hub"
       delegate_to: localhost
