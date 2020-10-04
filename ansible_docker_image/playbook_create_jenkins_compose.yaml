@@ -1,0 +1,9 @@
+- hosts: dummy
+  gather_facts: false
+  tasks:
+    - block:
+        - name: Add folder in jenkins
+          template:
+            src: docker-compose.yaml
+            dest: "{{ playbook_dir }}/../"
+      delegate_to: localhost
