@@ -1,5 +1,9 @@
 pipeline {
     agent none
+    parameters {
+        string(name: 'GIT_HASH', defaultValue: 'fe69934191ca46c4948a71f416c21dcc5a29e63a', description: 'git hash from ipxe repo')
+        string(name: 'WIMBOOT_VERSION', defaultValue: '2.6.0', description: 'Wimboot signed version to download')
+    }
     stages {
         stage('Build On Windows') {
             agent { label "docker" }
