@@ -56,7 +56,7 @@
       <submoduleCfg class="list"/>
       <extensions/>
     </scm>
-    <scriptPath>ansible_docker_image/Jenkinsfile</scriptPath>
+    <scriptPath>docker_image/Jenkinsfile</scriptPath>
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
