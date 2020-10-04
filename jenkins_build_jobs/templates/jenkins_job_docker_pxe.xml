@@ -56,7 +56,7 @@
       <submoduleCfg class="list"/>
       <extensions/>
     </scm>
-    <scriptPath>docker_image/Jenkinsfile</scriptPath>
+    <scriptPath>jenkins_build_jobs/Jenkinsfile</scriptPath>
     <lightweight>true</lightweight>
   </definition>
   <triggers/>
