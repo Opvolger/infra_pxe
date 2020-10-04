@@ -27,18 +27,32 @@ dism /Cleanup-Mountpoints
 
 ## Build
 
+Handmatig bouwen:
+
 ```bash
-docker build -t opvolger/pxe .
+docker build -t opvolger/pxe:latest . --build-arg GIT_HASH=fe69934191ca46c4948a71f416c21dcc5a29e63a --build-arg WIMBOOT_VERSION=2.6.0
 ```
 
-run playbook
+## Build straat
+
+Het inrichten van jenkins-server en slaves
 
 ```bash
 cd jenkins_build_jobs
 # create docker-compose for jenkins-server and slave (docker)
 ansible-playbook playbook_create_jenkins_compose.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
+cd ..
+docker-compose up
+```
+
+Als je al een buildserver hebt met een slave "docker" en "ansible" of niet uitgevoerd hier boven.
+
+```bash
+cd jenkins_build_jobs
+
 # configure jenkins add-slave auth. + don't allow anonymous login
 ansible-playbook playbook_configure_jenkins.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
+
 # configure jobs
 ansible-playbook playbook_configure_jenkins_jobs.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
 ```

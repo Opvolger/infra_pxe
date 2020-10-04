@@ -8,6 +8,8 @@
             user: "{{ jenkins.username }}"
             password: "{{ jenkins.password }}"
             url: "{{ jenkins.url }}"
+          register: jenkins_script_out
+          changed_when: '"creating local admin-user" in jenkins_script_out.output'
 
         - name: Secret slaves
           jenkins_script:
@@ -20,9 +22,12 @@
             secret: "{{ slave.password }}"
             id: "ssh_creds_{{ slave.hostname }}"
             description: "Creds for slave {{ slave.hostname }}"
-          loop: "{{ jenkins.slaves|flatten(levels=1) }}"
+          loop: "{{ jenkins.slaves }}"
           loop_control:
             loop_var: slave
+          register: jenkins_script_out
+          no_log: true
+          changed_when: '"no password changed" not in jenkins_script_out.output'
 
         - name: Create slaves
           jenkins_script:
@@ -30,5 +35,8 @@
             user: "{{ jenkins.username }}"
             password: "{{ jenkins.password }}"
             url: "{{ jenkins.url }}"
+          register: jenkins_script_out
+          no_log: true
+          changed_when: '"slave docker found" not in jenkins_script_out.output'
 
       delegate_to: localhost
