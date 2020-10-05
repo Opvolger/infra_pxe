@@ -48,19 +48,16 @@ RUN yum update -y && yum install -y dnsmasq supervisor nginx php-fpm php-common 
 ENV DHCP_RANGE=192.168.2.150
 ENV PXE_IP_ADDRESS=192.168.2.17
 
-# logging to stdout en stderr (logging docker)
-# RUN ln -sf /dev/stdout /var/log/supervisor/nginx.log
-# RUN ln -sf /dev/stdout /var/log/supervisor/dnsmasq.log
-# RUN ln -sf /dev/stdout /var/log/supervisor/php-fpm.log
-# RUN ln -sf /dev/stdout /var/log/supervisord.log
-
 # HTTP / DHCP / TFTP
 EXPOSE 80 67 67/udp 69 69/udp
 
 # Change html folder from /www to /pxe
 # && Enable autoindex (file browsing)
+# && logging to docker logs (/dev/stdout /dev/stderr)
 RUN sed -i -e 's|/usr/share/nginx/html;|/pxe;|' /etc/nginx/nginx.conf \
-    && sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf
+    && sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf \
+    && sed -i -e 's|/var/log/nginx/error.log|/dev/stderr|' /etc/nginx/nginx.conf \
+    && sed -i -e 's|/var/log/nginx/access.log|/dev/stdout|' /etc/nginx/nginx.conf
 
 # template dnsmasq only proxy dhcp (for pxe-request only)
 ADD templates/dnsmasq.conf /templates
