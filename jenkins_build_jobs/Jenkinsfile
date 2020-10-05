@@ -13,7 +13,7 @@ pipeline {
                     // build docker file.
                     sh "cd docker_image && docker build -t opvolger/pxe:${params.TAG} . --build-arg GIT_HASH=${params.GIT_HASH} --build-arg WIMBOOT_VERSION=${params.WIMBOOT_VERSION}"
                     // login docker hub && push image
-                    sh "echo $PASSWORD | docker login --username $USERNAME --password-stdin && docker push opvolger/pxe:${params.TAG}"
+                    sh "echo $PASSWORD | docker login --username $USERNAME --password-stdin && docker push opvolger/pxe:${params.TAG} && docker logout"
                     cleanWs() // clean de stage!
                 }
             }
