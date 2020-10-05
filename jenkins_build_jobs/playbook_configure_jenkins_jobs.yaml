@@ -1,3 +1,4 @@
+---
 - hosts: dummy
   gather_facts: false
   tasks:

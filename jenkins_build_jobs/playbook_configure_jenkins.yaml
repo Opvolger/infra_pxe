@@ -1,7 +1,22 @@
+---
 - hosts: dummy
   gather_facts: false
   tasks:
     - block:
+        - name: Install Plugins
+          shell: docker exec -i jenkins jenkins-plugin-cli --plugins {{ jenkins.plugins|join(' ') }}
+
+        - name: Restart jenkins
+          shell: docker restart jenkins
+
+        - name: Wait voor jenkins
+          shell: docker logs jenkins --since 30s  2>&1
+          retries: 6
+          delay: 15
+          register: docker_logs
+          failed_when: "'Jenkins is fully up and running' not in docker_logs.stdout"
+          until: docker_logs is not failed
+
         - name: Setup Jenkins
           jenkins_script:
             script: "{{ lookup('template', 'templates/setup_admin.groovy') }}"
