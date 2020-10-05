@@ -1,7 +1,6 @@
 compiled/*/*
 download/*/*
 compiled/*.zip
-docker_image/files/*/*
 generated/*
 download/*
 ansible_docker_pxe_deploy/group_vars/all.yaml

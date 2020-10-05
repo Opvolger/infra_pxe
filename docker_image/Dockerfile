@@ -31,7 +31,7 @@ FROM centos:8 as image_ipxe
 ARG WIMBOOT_VERSION
 
 # create dirs
-RUN mkdir -p /files/ipxe /pxe/ipxe /templates /run/php-fpm
+RUN mkdir -p /files/ipxe /pxe/ipxe /templates /run/php-fpm /var/log/supervisor
 
 # copy compiled code from compile_ipxe
 COPY --from=compile_ipxe /ipxe/src/bin/undionly.kpxe /files/ipxe
@@ -40,7 +40,7 @@ COPY --from=compile_ipxe /ipxe/src/bin-x86_64-efi/ipxe.efi /files/ipxe
 COPY --from=download_wimboot /wimboot-$WIMBOOT_VERSION-signed/wimboot /files/ipxe
 
 RUN yum -y check-update || { rc=$?; [ "$rc" -eq 100 ] && exit 0; exit "$rc"; }
-RUN yum update -y && yum install -y dnsmasq nginx php-fpm php-common php-cli && yum clean all;
+RUN yum update -y && yum install -y dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
 
 # default env
 ENV DHCP_RANGE=192.168.2.150
@@ -54,19 +54,15 @@ EXPOSE 80 67 67/udp 69 69/udp
 RUN sed -i -e 's|/usr/share/nginx/html;|/pxe;|' /etc/nginx/nginx.conf \
     && sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf
 
-# nginx logging to stdout en stderr (logging docker)
-RUN ln -sf /dev/stdout /var/log/nginx/access.log \
- && ln -sf /dev/stderr /var/log/nginx/error.log
-
 # template dnsmasq only proxy dhcp (for pxe-request only)
 ADD templates/dnsmasq.conf /templates
 
-# start file for transform dnsmasq.conf
-ADD files/start.sh /
+# docker-entrypoint file for transform dnsmasq.conf
+COPY files /
 
-RUN chmod +x /start.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # volume for all the files
 VOLUME /pxe
 
-CMD ["./start.sh"]
+CMD ["./docker-entrypoint.sh"]
