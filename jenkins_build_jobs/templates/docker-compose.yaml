@@ -18,7 +18,7 @@ services:
       USER: "{{ jenkins.slaves[0].username }}"
       PASSWORD: "{{ jenkins.slaves[0].password }}"
   jenkins:
-    image: opvolger/jenkins:latest
+    image: jenkins/jenkins:latest
     container_name: jenkins
     ports:
       - "8080:8080"
