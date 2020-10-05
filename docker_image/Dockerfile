@@ -49,10 +49,10 @@ ENV DHCP_RANGE=192.168.2.150
 ENV PXE_IP_ADDRESS=192.168.2.17
 
 # logging to stdout en stderr (logging docker)
-RUN ln -sf /dev/stdout /var/log/supervisor/nginx.log
-RUN ln -sf /dev/stdout /var/log/supervisor/dnsmasq.log
-RUN ln -sf /dev/stdout /var/log/supervisor/php-fpm.log
-RUN ln -sf /dev/stdout /var/log/supervisord.log
+# RUN ln -sf /dev/stdout /var/log/supervisor/nginx.log
+# RUN ln -sf /dev/stdout /var/log/supervisor/dnsmasq.log
+# RUN ln -sf /dev/stdout /var/log/supervisor/php-fpm.log
+# RUN ln -sf /dev/stdout /var/log/supervisord.log
 
 # HTTP / DHCP / TFTP
 EXPOSE 80 67 67/udp 69 69/udp
