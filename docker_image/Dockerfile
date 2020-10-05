@@ -45,7 +45,9 @@ RUN yum -y check-update || { rc=$?; [ "$rc" -eq 100 ] && exit 0; exit "$rc"; }
 RUN yum update -y && yum install -y dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
 
 # default env
-ENV DHCP_RANGE=192.168.2.150
+# dhcp proxy mode. do not act as the authoratitive dhcp server
+ENV DHCP_RANGE=192.168.2.0,proxy
+# my pxe server at home
 ENV PXE_IP_ADDRESS=192.168.2.17
 
 # HTTP / DHCP / TFTP
