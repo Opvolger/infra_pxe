@@ -40,7 +40,7 @@ COPY --from=compile_ipxe /ipxe/src/bin-x86_64-efi/ipxe.efi /files/ipxe
 COPY --from=download_wimboot /wimboot-$WIMBOOT_VERSION-signed/wimboot /files/ipxe
 
 # you need epel-release for supervisor
-RUN yum install epel-release
+RUN yum install epel-release -y
 RUN yum -y check-update || { rc=$?; [ "$rc" -eq 100 ] && exit 0; exit "$rc"; }
 RUN yum update -y && yum install -y dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
 
