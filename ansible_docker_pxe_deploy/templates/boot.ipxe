@@ -63,7 +63,8 @@ goto ${selected}
   set name_os {{ item.name_os }}
   set version {{ item.version }}
   set arch {{ item.arch }}
-  set http_location http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
+  set http_location_boot http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
+  set http_location_iso http://${ipxe_server_ip}/iso/${name_os}/${version}/${arch}
   set samba_location //${samba_hostname}/${samba_share}/iso/${name_os}/${version}/${arch}
   set nfs_location ${nfs_hostname}:${nfs_share}/iso/${name_os}/${version}/${arch}
 {% for n in range(item.boot_commands| length) %}
