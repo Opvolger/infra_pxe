@@ -39,9 +39,6 @@ item --key x exit         Exit iPXE and continue BIOS boot
 set samba_hostname   ${ipxe_server_ip}
 set samba_share      pxe
 
-set nfs_hostname   {{ nfs.hostname }}
-set nfs_share      {{ nfs.share }}
-
 choose --timeout ${menu_timeout} --default ${menu_default} selected || goto cancel
 
 goto ${selected}
@@ -65,7 +62,6 @@ goto ${selected}
   set http_location_boot http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
   set http_location_iso http://${ipxe_server_ip}/iso/${name_os}/${version}/${arch}/
   set samba_location //${samba_hostname}/${samba_share}/iso/${name_os}/${version}/${arch}
-  set nfs_location ${nfs_hostname}:${nfs_share}/iso/${name_os}/${version}/${arch}
 {% for n in range(item.boot_commands| length) %}
   {{ item.boot_commands[n] }}
 {% endfor %}

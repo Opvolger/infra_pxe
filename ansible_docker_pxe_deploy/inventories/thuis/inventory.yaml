@@ -1,10 +1,6 @@
 ---
 all:
   vars:
-    # nfs wil je niet in docker draaien
-    nfs:
-      hostname: 192.168.2.13
-      share: /volume1/boot
     docker_deploy:
       volume_pxe: "/home/opvolger/pxe/volume_pxe"
       dir: "/home/opvolger/pxe"
@@ -104,7 +100,7 @@ all:
           #   key: "2"
           #   text: (2) Boot Ubuntu 20.04.1 (64) (from nfs)
           #   boot_commands:
-          #     - kernel ${http_location_boot}/vmlinuz showmounts toram boot=casper netboot=nfs nfsroot=${nfs_location} ip=dhcp
+          #     - kernel ${http_location_boot}/vmlinuz showmounts toram boot=casper netboot=nfs nfsroot=192.168.2.13:/volume1/boot/iso/${name_os}/${version}/${arch} ip=dhcp
           #     - initrd ${http_location_boot}/initrd
           - name_item: ubuntu3
             name_os: ubuntu
@@ -132,10 +128,8 @@ all:
             key: "m"
             text: (m) Boot Manjaro 20.1 (64) (from http)
             boot_commands:
-            # https://wiki.archlinux.org/index.php/Preboot_Execution_Environment#Transferring_archiso_root_filesystem
-            # https://github.com/manjaro/manjaro-tools/issues/84
-              #- kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_nfs_srv=${nfs_location} ip=dhcp # ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
-              - kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_http_srv=${http_location_iso} ip=dhcp # ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
+              #- kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_nfs_srv=192.168.2.13:/volume1/boot/iso/${name_os}/${version}/${arch} ip=dhcp
+              - kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_http_srv=${http_location_iso} ip=dhcp
               - initrd ${http_location_boot}/intel_ucode.img 
               - initrd ${http_location_boot}/amd_ucode.img 
               - initrd ${http_location_boot}/initramfs-x86_64.img
