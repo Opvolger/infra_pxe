@@ -52,7 +52,7 @@ ENV DHCP_RANGE=192.168.2.0,proxy
 ENV PXE_IP_ADDRESS=192.168.2.17
 
 # HTTP / DHCP / TFTP
-EXPOSE 80 67 67/udp 69 69/udp 139 445 111/udp 2049/tcp
+EXPOSE 80 67 67/udp 69 69/udp 137/udp 138/udp 139 445
 
 # Change html folder from /www to /pxe
 # && Enable autoindex (file browsing)
