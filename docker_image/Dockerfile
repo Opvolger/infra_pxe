@@ -42,7 +42,7 @@ COPY --from=download_wimboot /wimboot-$WIMBOOT_VERSION-signed/wimboot /files/ipx
 # you need epel-release for supervisor
 RUN yum install epel-release -y
 RUN yum -y check-update || { rc=$?; [ "$rc" -eq 100 ] && exit 0; exit "$rc"; }
-RUN yum update -y && yum install -y nfs-kernel-server nfs-utils samba samba-common dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
+RUN yum update -y && yum install -y nfs-utils samba samba-common dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
 
 # default env
 # dhcp proxy mode. do not act as the authoratitive dhcp server
