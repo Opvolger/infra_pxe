@@ -1,1 +1,1 @@
-/pxe *(rw,insecure,sync,no_subtree_check,fsid=0,no_root_squash)
+/pxe *(ro,insecure,sync,no_subtree_check,fsid=0,no_root_squash)
