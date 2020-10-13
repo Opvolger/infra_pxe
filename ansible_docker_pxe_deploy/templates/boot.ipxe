@@ -39,7 +39,6 @@ item --key x exit         Exit iPXE and continue BIOS boot
 set samba_hostname   ${ipxe_server_ip}
 set samba_share      pxe
 
-# TODO NFS-server
 set nfs_hostname   ${ipxe_server_ip}
 set nfs_share      /pxe
 

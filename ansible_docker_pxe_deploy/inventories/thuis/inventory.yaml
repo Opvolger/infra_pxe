@@ -100,7 +100,7 @@ all:
             key: "2"
             text: (2) Boot Ubuntu 20.04.1 (64) (from nfs)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_location} NFSOPTS=vers=3 ip=dhcp
+              - kernel ${http_location_boot}/vmlinuz showmounts toram boot=casper root=/dev/nfs netboot=nfs nfsroot=${nfs_location} NFSOPTS=vers=4 ip=dhcp
               - initrd ${http_location_boot}/initrd
           - name_item: manjaro_kde_64
             name_os: manjaro
@@ -120,8 +120,8 @@ all:
             boot_commands:
             # https://wiki.archlinux.org/index.php/Preboot_Execution_Environment#Transferring_archiso_root_filesystem
             # https://github.com/manjaro/manjaro-tools/issues/84
-              #- kernel ${http_location_boot}/vmlinuz-x86_64 archisobasedir=manjaro archiso_nfs_srv=${nfs_location} ip=dhcp # ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
-              - kernel ${http_location_boot}/vmlinuz-x86_64 archisobasedir=manjaro archiso_http_srv=${http_location_iso} ip=dhcp # ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
+              - kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=/iso/${name_os}/${version}/${arch}/manjaro/x86_64 miso_nfs_srv=${nfs_hostname}:${nfs_share} ip=dhcp # ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
+              #- kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=/iso/${name_os}/${version}/${arch}/manjaro miso_http_srv=http://${ipxe_server_ip} ip=dhcp # ip=192.168.2.120:192.168.2.17:192.168.2.254:255.255.255.0::eth0:off nameserver=192.168.2.254
               - initrd ${http_location_boot}/intel_ucode.img 
               - initrd ${http_location_boot}/amd_ucode.img 
               - initrd ${http_location_boot}/initramfs-x86_64.img
