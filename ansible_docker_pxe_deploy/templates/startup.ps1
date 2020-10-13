@@ -8,7 +8,7 @@ Start-Sleep -s 15
 
 CMD /C VER
 
-net use s: \\${hostname}\${share} $password /user:WORKGROUP\$username
+net use s: \\${hostname}\${share}
 
 Write-Output (Get-Date)
 
