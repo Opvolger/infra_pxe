@@ -7,9 +7,5 @@ all:
       env:
         dhcp_range: "{{ boot_ipxe.dhcp_range_for_pxe_boot }}"
         pxe_ip_address: "{{ boot_ipxe.ip_address }}"
-        samba_ip_address: "{{ samba.hostname }}"
-        samba_share: "{{ samba.share }}"
-        samba_username: "{{ samba.share }}"
-        samba_password: "{{ samba.share }}"
       volume:
         pxe: "{{ docker_deploy.volume_pxe }}"
