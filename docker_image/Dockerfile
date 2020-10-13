@@ -42,7 +42,7 @@ COPY --from=download_wimboot /wimboot-$WIMBOOT_VERSION-signed/wimboot /files/ipx
 # you need epel-release for supervisor
 RUN yum install epel-release -y
 RUN yum -y check-update || { rc=$?; [ "$rc" -eq 100 ] && exit 0; exit "$rc"; }
-RUN yum update -y && yum install -y samba samba-common dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
+RUN yum update -y && yum install -y nfs-kernel-server nfs-utils samba samba-common dnsmasq supervisor nginx php-fpm php-common php-cli && yum clean all;
 
 # default env
 # dhcp proxy mode. do not act as the authoratitive dhcp server
@@ -51,7 +51,7 @@ ENV DHCP_RANGE=192.168.2.0,proxy
 ENV PXE_IP_ADDRESS=192.168.2.17
 
 # HTTP / DHCP / TFTP
-EXPOSE 80 67 67/udp 69 69/udp 139 445
+EXPOSE 80 67 67/udp 69 69/udp 139 445 111/udp 2049/tcp
 
 # Change html folder from /www to /pxe
 # && Enable autoindex (file browsing)
@@ -68,6 +68,9 @@ ADD templates/dnsmasq.conf /templates
 COPY files /
 
 RUN chmod +x /docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/run-mountd.sh
+
+RUN chmod -R 755 /pxe
 
 # volume for all the files
 VOLUME /pxe

@@ -11,11 +11,9 @@ all:
       background_jpg: http://opvolger.net/winpe.jpg
     boot_ipxe:
       ip_address: "192.168.2.17"
-      dhcp_range_for_pxe_boot: "192.168.2.0"
+      dhcp_range_for_pxe_boot: "192.168.2.254,proxy"
       # background_png: https://pc-freak.net/penguins/tux-003-1024x768.png
       background_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
-      samba: "{{ samba }}"
-      nfs: "{{ nfs }}"
       menu_default: disk
       menu_os_items:
         linux:
@@ -145,26 +143,6 @@ all:
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD          BCD
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi     boot.sdi
               - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim  boot.wim
-    # samba and nfs on the same nas
-    nas:
-      hostname: "192.168.2.13"
-      share: "boot"
-      username: "boot"
-      password: !vault |
-        $ANSIBLE_VAULT;1.2;AES256;thuis
-        37666133336534363836323032623236643537366338383739353561666332633730366365386632
-        6338313233313433616136303939333236633866313632390a613038393362326235343133383364
-        61626237313563333362376465376361326635316337376333373265663763393032306337316431
-        6237373131326534300a353438646436386535333461643738323062323263653438346534363835
-        3864
-    nfs:
-      hostname: "{{ nas.hostname }}"
-      share: "/volume1/{{ nas.share }}"
-    samba:
-      hostname: "{{ nas.hostname }}"
-      share: "{{ nas.share }}"
-      username: "{{ nas.username }}"
-      password: "{{ nas.password }}"
   children:
     deploy:
       hosts:

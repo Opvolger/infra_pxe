@@ -1,10 +1,8 @@
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $ProgressPreference = 'SilentlyContinue'
 
-$hostname = "{{ boot_ipxe.samba.hostname }}"
-$share = "{{ boot_ipxe.samba.share }}"
-$username = "{{ boot_ipxe.samba.username }}"
-$password = "{{ boot_ipxe.samba.password }}"
+$hostname = "{{ boot_ipxe.ip_address }}"
+$share = "pxe"
 
 Start-Sleep -s 15
 
