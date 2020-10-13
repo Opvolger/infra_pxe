@@ -2,7 +2,6 @@ version: '2.1'
 
 services:
   pxe:
-    privileged: true # for nfs server
     image: opvolger/pxe:${DOCKER_PXE_TAG}
     network_mode: host
     container_name: pxe

@@ -39,8 +39,8 @@ item --key x exit         Exit iPXE and continue BIOS boot
 set samba_hostname   ${ipxe_server_ip}
 set samba_share      pxe
 
-set nfs_hostname   ${ipxe_server_ip}
-set nfs_share      /pxe
+set nfs_hostname   {{ nfs.hostname }}
+set nfs_share      {{ nfs.share }}
 
 choose --timeout ${menu_timeout} --default ${menu_default} selected || goto cancel
 
