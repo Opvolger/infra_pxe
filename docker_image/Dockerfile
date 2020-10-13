@@ -52,7 +52,7 @@ ENV DHCP_RANGE=192.168.2.0,proxy
 ENV PXE_IP_ADDRESS=192.168.2.17
 
 # HTTP / DHCP / TFTP
-EXPOSE 80 67 67/udp 69 69/udp 139 445 111/tcp 111/udp 662/udp 662/tcp 875/udp 875/tcp 2049/udp 2049/tcp 32769/udp 32803/tcp 892/udp 892/tcp
+EXPOSE 80 67 67/udp 69 69/udp 139 445 111/udp 2049/tcp
 
 # Change html folder from /www to /pxe
 # && Enable autoindex (file browsing)
@@ -70,12 +70,6 @@ COPY files /
 
 RUN chmod +x /docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/run-mountd.sh
-
-RUN echo 'RPCRQUOTADOPTS="-p 875"' >> /etc/sysconfig/nfs
-RUN echo 'LOCKD_TCPPORT="32803"' >> /etc/sysconfig/nfs
-RUN echo 'LOCKD_UDPPORT="32769"' >> /etc/sysconfig/nfs
-RUN echo 'RPCMOUNTDOPTS="-p 892"' >> /etc/sysconfig/nfs
-RUN echo 'STATDARG="-p 662 -o 2020"' >> /etc/sysconfig/nfs
 
 # volume for all the files
 VOLUME /pxe

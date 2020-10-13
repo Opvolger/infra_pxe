@@ -1,8 +1,8 @@
 set -eu
 
-exportfs -a
+exportfs -ar
 rpcbind
-rpc.statd -p 662 -o 2020
+rpc.statd
 rpc.nfsd
 
-exec rpc.mountd -p 892 --foreground
+exec rpc.mountd --foreground
