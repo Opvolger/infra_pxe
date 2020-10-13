@@ -69,7 +69,6 @@ ADD templates/dnsmasq.conf /templates
 COPY files /
 
 RUN chmod +x /docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/run-mountd.sh
 
 # volume for all the files
 VOLUME /pxe
