@@ -90,7 +90,7 @@ all:
             key: u
             text: (u) Boot Ubuntu 20.04.1 (64) (from samba)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=${samba_location}  NFSOPTS=-ouser=${samba_username},pass=${samba_password} ip=dhcp ro
+              - kernel ${http_location_boot}/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=${samba_location} ip=dhcp ro
               - initrd ${http_location_boot}/initrd
           # - name_item: ubuntu2
           #   name_os: ubuntu
