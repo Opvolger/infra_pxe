@@ -38,10 +38,10 @@ def createOrchangePassword = { id, username, password, description ->
     } else {
         // parameters
         def jenkinsKeyUsernameWithPasswordParameters = [
-        description:  description,
-        id:           id,
-        secret:       password,
-        userName:     username
+            description:  description,
+            id:           id,
+            secret:       password,
+            userName:     username
         ]
 
         // get Jenkins instance
@@ -55,11 +55,11 @@ def createOrchangePassword = { id, username, password, description ->
 
         // define Bitbucket secret
         def jenkinsKeyUsernameWithPassword = new UsernamePasswordCredentialsImpl(
-        CredentialsScope.GLOBAL,
-        jenkinsKeyUsernameWithPasswordParameters.id,
-        jenkinsKeyUsernameWithPasswordParameters.description,
-        jenkinsKeyUsernameWithPasswordParameters.userName,
-        jenkinsKeyUsernameWithPasswordParameters.secret
+            CredentialsScope.GLOBAL,
+            jenkinsKeyUsernameWithPasswordParameters.id,
+            jenkinsKeyUsernameWithPasswordParameters.description,
+            jenkinsKeyUsernameWithPasswordParameters.userName,
+            jenkinsKeyUsernameWithPasswordParameters.secret
         )
 
         // add credential to store
