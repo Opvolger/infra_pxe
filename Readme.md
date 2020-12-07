@@ -27,6 +27,8 @@ dism /Cleanup-Mountpoints
 
 ## Build
 
+pip install python-jenkins
+
 Handmatig bouwen:
 
 ```bash
