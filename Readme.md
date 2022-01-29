@@ -1,6 +1,7 @@
 # iPXE
 
 Ideeen opgedaan met:
+
 - https://hub.docker.com/r/dreamcat4/pxe
 - https://github.com/dreamcat4/docker-images/blob/master/pxe/Dockerfile
 - https://centos.pkgs.org/8/centos-appstream-aarch64/ipxe-bootimgs-20181214-5.git133f4c47.el8.noarch.rpm.html
@@ -32,7 +33,7 @@ pip install python-jenkins
 Handmatig bouwen:
 
 ```bash
-docker build -t opvolger/pxe:latest . --build-arg GIT_HASH=fe69934191ca46c4948a71f416c21dcc5a29e63a --build-arg WIMBOOT_VERSION=2.6.0
+docker build -t opvolger/pxe:latest . --build-arg GIT_HASH=988d2c13cdf0f0b4140685af35ced70ac5b3283c --build-arg WIMBOOT_VERSION=2.6.0
 ```
 
 ## Build straat
@@ -59,12 +60,14 @@ ansible-playbook playbook_configure_jenkins.yaml -i inventory.yaml --vault-id th
 ansible-playbook playbook_configure_jenkins_jobs.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
 ```
 
+```bash
 ansible-playbook playbook_create_wimboot_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
 
 ansible-vault encrypt_string --vault-id thuis@~/vault-thuis.txt
 
 ansible-playbook playbook_update_docker_files.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
 ansible-playbook playbook_deploy.yaml -i inventories/default.yaml  -i inventories/thuis --vault-id thuis@~/vault-thuis.txt --ask-become-pass --ask-pass
+```
 
 ipxe
 
@@ -86,7 +89,6 @@ docker push opvolger/pxe
 ## TODO
 
 - NFS server in docker
-- SAMBA share in docker
 - VMware: https://ipxe.org/howto/vmware
 - uitpakken iso op samba / nfs share
 - niet uitpakken winpe.zip als hij er niet is... (alleen linux boot menu)

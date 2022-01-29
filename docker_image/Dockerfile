@@ -1,4 +1,4 @@
-FROM centos:8 as compile_ipxe
+FROM rockylinux:8 as compile_ipxe
 
 # dependencies
 RUN yum update -y && yum groupinstall -y 'Development Tools' && yum install -y xz-devel && yum clean all;
@@ -16,7 +16,7 @@ RUN sed -i -E "s/(^\/\/#define.IMAGE_PNG)(.*)/#define IMAGE_PNG\2/" /ipxe/src/co
 # compile source
 RUN cd /ipxe/src && make bin/undionly.kpxe && cd /ipxe/src && make bin-x86_64-efi/ipxe.efi
 
-FROM centos:8 as download_wimboot
+FROM rockylinux:8 as download_wimboot
 
 # dependencies
 RUN yum update -y && yum install -y wget unzip && yum clean all;
@@ -26,7 +26,7 @@ ARG WIMBOOT_VERSION
 # https://git.ipxe.org/release/wimboot/
 RUN wget -N https://git.ipxe.org/release/wimboot/wimboot-$WIMBOOT_VERSION-signed.zip -P / &&  unzip -o /wimboot-$WIMBOOT_VERSION-signed.zip -d /
 
-FROM centos:8 as image_ipxe
+FROM rockylinux:8 as image_ipxe
 
 ARG WIMBOOT_VERSION
 
@@ -52,13 +52,14 @@ ENV DHCP_RANGE=192.168.2.0,proxy
 ENV PXE_IP_ADDRESS=192.168.2.17
 
 # HTTP / DHCP / TFTP
-EXPOSE 80 67 67/udp 69 69/udp 137/udp 138/udp 139 445
+EXPOSE 8084 67 67/udp 69 69/udp 137/udp 138/udp 139 445
 
 # Change html folder from /www to /pxe
 # && Enable autoindex (file browsing)
 # && logging to docker logs (/dev/stdout /dev/stderr)
 RUN sed -i -e 's|/usr/share/nginx/html;|/pxe;|' /etc/nginx/nginx.conf \
     && sed -i -e 's|location / {|location / { autoindex on;|' /etc/nginx/nginx.conf \
+    && sed -i 's/80 default_server/8084 default_server/' /etc/nginx/nginx.conf \
     && sed -i -e 's|/var/log/nginx/error.log|/dev/stderr|' /etc/nginx/nginx.conf \
     && sed -i -e 's|/var/log/nginx/access.log|/dev/stdout|' /etc/nginx/nginx.conf
 

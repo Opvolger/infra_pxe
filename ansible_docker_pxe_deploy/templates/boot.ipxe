@@ -5,14 +5,15 @@
 dhcp
 set keep-san 1
 set ipxe_server_ip ${proxydhcp/dhcp-server}
+set ipxe_http_port 8084
 
 console --x 1024 --y 768
-console --picture http://${ipxe_server_ip}/images/splash.png
+console --picture http://${ipxe_server_ip}:${ipxe_http_port}/images/splash.png
 
 set menu_timeout 30000
 set menu_default {{ boot_ipxe.menu_default }}
 
-chain --autofree  http://${ipxe_server_ip}/ipxe/cfg/mac-${mac:hexraw}.ipxe ||
+chain --autofree  http://${ipxe_server_ip}:${ipxe_http_port}/ipxe/cfg/mac-${mac:hexraw}.ipxe ||
 
 :start
 menu iPXE boot menu for hostname: ${hostname} domain: ${domain} mac: ${net0/mac} ip: ${net0/ip}
@@ -59,8 +60,8 @@ goto ${selected}
   set name_os {{ item.name_os }}
   set version {{ item.version }}
   set arch {{ item.arch }}
-  set http_location_boot http://${ipxe_server_ip}/boot/${name_os}/${version}/${arch}
-  set http_location_iso http://${ipxe_server_ip}/iso/${name_os}/${version}/${arch}/
+  set http_location_boot http://${ipxe_server_ip}:${ipxe_http_port}/boot/${name_os}/${version}/${arch}
+  set http_location_iso http://${ipxe_server_ip}:${ipxe_http_port}/iso/${name_os}/${version}/${arch}/
   set samba_location //${samba_hostname}/${samba_share}/iso/${name_os}/${version}/${arch}
 {% for n in range(item.boot_commands| length) %}
   {{ item.boot_commands[n] }}

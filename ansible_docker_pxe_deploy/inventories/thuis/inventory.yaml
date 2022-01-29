@@ -10,7 +10,7 @@ all:
       download_with_samba: true
       background_jpg: http://opvolger.net/winpe.jpg
     boot_ipxe:
-      ip_address: "192.168.2.17"
+      ip_address: "192.168.2.18"
       dhcp_range_for_pxe_boot: "192.168.2.254,proxy"
       # background_png: https://pc-freak.net/penguins/tux-003-1024x768.png
       background_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
@@ -30,7 +30,7 @@ all:
             key: s
             text: (s) Boot Slax 9.11.0 (64) (from http/iso)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-64bit-9.11.0.iso
+              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}:${ipxe_http_port}/iso/slax-64bit-9.11.0.iso
               - initrd ${http_location_boot}/initrfs.img
           - name_item: slax_32
             name_os: slax
@@ -45,7 +45,7 @@ all:
             key: d
             text: (d) Boot Slax 9.11.0 (32) (from http/iso)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}/iso/slax-32bit-9.11.0.iso
+              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}:${ipxe_http_port}/iso/slax-32bit-9.11.0.iso
               - initrd ${http_location_boot}/initrfs.img
           - name_item: gparted_64
             name_os: gparted
@@ -110,14 +110,14 @@ all:
             key: "3"
             text: (3) Boot Ubuntu 20.04.1 (64) (from http)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz url=http://${ipxe_server_ip}/iso/ubuntu-20.04.1-desktop-amd64.iso ip=dhcp
+              - kernel ${http_location_boot}/vmlinuz url=http://${ipxe_server_ip}:${ipxe_http_port}/iso/ubuntu-20.04.1-desktop-amd64.iso ip=dhcp
               - initrd ${http_location_boot}/initrd              
           - name_item: manjaro_kde_64
             name_os: manjaro
-            version: "20.1"
+            version: "21.2.2"
             arch: amd64
             iso:
-              download: https://osdn.net/projects/manjaro/storage/kde/20.1/manjaro-kde-20.1-200911-linux58.iso
+              download: https://download.manjaro.org/kde/21.2.2/manjaro-kde-21.2.2-220123-linux515.iso
               extract_to: nfs
               bootfiles:
                 - boot/vmlinuz-x86_64
@@ -126,7 +126,7 @@ all:
                 - boot/initramfs-x86_64.img
             # no iso here, because it already comes with the item above
             key: "m"
-            text: (m) Boot Manjaro 20.1 (64) (from http)
+            text: (m) Boot Manjaro 21.2.2 (64) (from http)
             boot_commands:
               #- kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_nfs_srv=192.168.2.13:/volume1/boot/iso/${name_os}/${version}/${arch} ip=dhcp
               - kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_http_srv=${http_location_iso} ip=dhcp
@@ -139,22 +139,22 @@ all:
             version: "10_home_pro_en"
             arch: amd64
             iso:
-              name: Windows.iso
+              name: en-us_windows_10_consumer_editions_version_21h2_updated_jan_2022_x64_dvd_3c841607.iso
               extract_to: samba
             key: w
             text: (w) Boot Windows 10 Setup (from samba)
             boot_commands:
               - cpuid --ext 29 && set arch amd64 || set arch x86
-              - kernel http://${ipxe_server_ip}/ipxe/wimboot
+              - kernel http://${ipxe_server_ip}:${ipxe_http_port}/ipxe/wimboot
               - initrd ${http_location_boot}/winpeshl.ini                                  winpeshl.ini
               - initrd ${http_location_boot}/startup.ps1                                   startup.ps1
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/BCD          BCD
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/Boot/boot.sdi     boot.sdi
-              - initrd http://${ipxe_server_ip}/winpe/${arch}/media/sources/boot.wim  boot.wim
+              - initrd http://${ipxe_server_ip}:${ipxe_http_port}/winpe/${arch}/media/Boot/BCD          BCD
+              - initrd http://${ipxe_server_ip}:${ipxe_http_port}/winpe/${arch}/media/Boot/boot.sdi     boot.sdi
+              - initrd http://${ipxe_server_ip}:${ipxe_http_port}/winpe/${arch}/media/sources/boot.wim  boot.wim
   children:
     deploy:
       hosts:
-        "192.168.2.17":
+        "192.168.2.18":
     windows_adk:
       hosts:
         "192.168.2.38":
