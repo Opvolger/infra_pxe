@@ -10,7 +10,7 @@ all:
       download_with_samba: true
       background_jpg: http://opvolger.net/winpe.jpg
     boot_ipxe:
-      ip_address: "192.168.2.18"
+      ip_address: "192.168.2.201"
       dhcp_range_for_pxe_boot: "192.168.2.254,proxy"
       # background_png: https://pc-freak.net/penguins/tux-003-1024x768.png
       background_png: https://github.com/bradgillap/IPXEBOOT/raw/master/boot.png
@@ -19,10 +19,10 @@ all:
         linux:
           - name_item: slax_64
             name_os: slax
-            version: "9.11.0"
+            version: "15.0.1"
             arch: amd64
             iso:
-              download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-64bit-9.11.0.iso
+              download: https://ftp.sh.cvut.cz/slax/Slax-15.x/slax-64bit-15.0.1.iso
               boot_from_iso: yes
               bootfiles:
                 - slax/boot/vmlinuz
@@ -30,109 +30,65 @@ all:
             key: s
             text: (s) Boot Slax 9.11.0 (64) (from http/iso)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}:${ipxe_http_port}/iso/slax-64bit-9.11.0.iso
-              - initrd ${http_location_boot}/initrfs.img
-          - name_item: slax_32
-            name_os: slax
-            version: "9.11.0"
-            arch: x84
-            iso:
-              download: http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-32bit-9.11.0.iso
-              boot_from_iso: yes
-              bootfiles:
-                - slax/boot/vmlinuz
-                - slax/boot/initrfs.img
-            key: d
-            text: (d) Boot Slax 9.11.0 (32) (from http/iso)
-            boot_commands:
-              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}:${ipxe_http_port}/iso/slax-32bit-9.11.0.iso
+              - kernel ${http_location_boot}/vmlinuz vga=normal load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 consoleblank=0 slax.flags=perch,automount from=http://${ipxe_server_ip}:${ipxe_http_port}/iso/slax-64bit-15.0.1.iso
               - initrd ${http_location_boot}/initrfs.img
           - name_item: gparted_64
             name_os: gparted
-            version: "1.1.0-5"
+            version: "1.5.0-6"
             arch: amd64
             iso:
-              download: http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/GParted/gparted-live-1.1.0-5-amd64.iso
+              download: https://netix.dl.sourceforge.net/project/gparted/gparted-live-stable/1.5.0-6/gparted-live-1.5.0-6-amd64.iso
               bootfiles:
                 - live/vmlinuz
                 - live/initrd.img
                 - live/filesystem.squashfs
             key: g
-            text: (g) Boot Gparted 1.1.0-5 (64) (from http/squashfs)
-            boot_commands:
-              - kernel ${http_location_boot}/vmlinuz boot=live config components union=overlay username=user noswap noeject ip=dhcp vga=788 fetch=${http_location_boot}/filesystem.squashfs
-              - initrd ${http_location_boot}/initrd.img
-          - name_item: gparted_32
-            name_os: gparted
-            version: "1.1.0-5"
-            arch: x86
-            iso:
-              download: http://www.cs.tohoku-gakuin.ac.jp/pub/Linux/GParted/gparted-live-1.1.0-5-i686.iso
-              bootfiles:
-                - live/vmlinuz
-                - live/initrd.img
-                - live/filesystem.squashfs
-            key: h
-            text: (h) Boot Gparted 1.1.0-5 (32) (from http/squashfs)
+            text: (g) Boot Gparted 1.5.0-6 (64) (from http/squashfs)
             boot_commands:
               - kernel ${http_location_boot}/vmlinuz boot=live config components union=overlay username=user noswap noeject ip=dhcp vga=788 fetch=${http_location_boot}/filesystem.squashfs
               - initrd ${http_location_boot}/initrd.img
           - name_item: ubuntu
             name_os: ubuntu
-            version: "20.04.1"
+            version: "22.04.3"
             arch: amd64
             iso:
-              download: https://releases.ubuntu.com/20.04/ubuntu-20.04.1-desktop-amd64.iso
+              download: https://releases.ubuntu.com/jammy/ubuntu-22.04.3-desktop-amd64.iso
+              boot_from_iso: yes
               extract_to: samba
               bootfiles:
                 - casper/vmlinuz
                 - casper/initrd
             key: u
-            text: (u) Boot Ubuntu 20.04.1 (64) (from samba)
+            text: (u) Boot Ubuntu 22.04.3 (64) (from samba)
             boot_commands:
               - kernel ${http_location_boot}/vmlinuz showmounts toram root=/dev/cifs boot=casper netboot=cifs nfsroot=${samba_location} ip=dhcp ro
               - initrd ${http_location_boot}/initrd
-          # - name_item: ubuntu2
-          #   name_os: ubuntu
-          #   version: "20.04.1"
-          #   arch: amd64
-          #   # no iso here, because it already comes with the item above
-          #   key: "2"
-          #   text: (2) Boot Ubuntu 20.04.1 (64) (from nfs)
-          #   boot_commands:
-          #     - kernel ${http_location_boot}/vmlinuz showmounts toram boot=casper netboot=nfs nfsroot=192.168.2.13:/volume1/boot/iso/${name_os}/${version}/${arch} ip=dhcp
-          #     - initrd ${http_location_boot}/initrd
           - name_item: ubuntu3
             name_os: ubuntu
-            version: "20.04.1"
+            version: "22.04.1"
             arch: amd64
             # no iso here, because it already comes with the item above
             key: "3"
-            text: (3) Boot Ubuntu 20.04.1 (64) (from http)
+            text: (3) Boot Ubuntu 22.04.1 (64) (from http)
             boot_commands:
-              - kernel ${http_location_boot}/vmlinuz url=http://${ipxe_server_ip}:${ipxe_http_port}/iso/ubuntu-20.04.1-desktop-amd64.iso ip=dhcp
+              - kernel ${http_location_boot}/vmlinuz url=http://${ipxe_server_ip}:${ipxe_http_port}/iso/ubuntu-22.04.3-desktop-amd64.iso ip=dhcp
               - initrd ${http_location_boot}/initrd              
-          - name_item: manjaro_kde_64
-            name_os: manjaro
-            version: "21.2.2"
+          - name_item: fedora_server
+            name_os: fedora
+            version: "39-1.5"
             arch: amd64
             iso:
-              download: https://download.manjaro.org/kde/21.2.2/manjaro-kde-21.2.2-220123-linux515.iso
-              extract_to: nfs
+              download: https://download.fedoraproject.org/pub/fedora/linux/releases/39/Server/x86_64/iso/Fedora-Server-dvd-x86_64-39-1.5.iso
+              boot_from_iso: yes
               bootfiles:
-                - boot/vmlinuz-x86_64
-                - boot/intel_ucode.img
-                - boot/amd_ucode.img
-                - boot/initramfs-x86_64.img
+                - images/pxeboot/vmlinuz
+                - images/pxeboot/initrd.img
             # no iso here, because it already comes with the item above
             key: "m"
-            text: (m) Boot Manjaro 21.2.2 (64) (from http)
+            text: (m) Boot Fedora-Server 39-1.5 (64) (from http)
             boot_commands:
-              #- kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_nfs_srv=192.168.2.13:/volume1/boot/iso/${name_os}/${version}/${arch} ip=dhcp
-              - kernel ${http_location_boot}/vmlinuz-x86_64 misobasedir=manjaro miso_http_srv=${http_location_iso} ip=dhcp
-              - initrd ${http_location_boot}/intel_ucode.img 
-              - initrd ${http_location_boot}/amd_ucode.img 
-              - initrd ${http_location_boot}/initramfs-x86_64.img
+              - kernel ${http_location_boot}/vmlinuz url=${http_location_iso} ip=dhcp
+              - initrd ${http_location_boot}/initrd.img
         windows:
           - name_item: windows10setup
             name_os: windows
@@ -154,7 +110,7 @@ all:
   children:
     deploy:
       hosts:
-        "192.168.2.18":
+        "192.168.2.201":
     windows_adk:
       hosts:
         "192.168.2.38":

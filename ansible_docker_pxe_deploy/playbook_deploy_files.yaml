@@ -10,7 +10,7 @@
           register: compose_file
 
         - name: remove old files, container must be-down
-          shell: docker-compose down
+          shell: docker compose down
           args:
             chdir: "{{ docker_deploy.dir }}"
           when: compose_file.stat.exists
@@ -63,7 +63,7 @@
         remote_src: yes
 
     - name: enable docker-container
-      shell: docker-compose up -d
+      shell: docker compose up -d
       args:
         chdir: "{{ docker_deploy.dir }}"
       when: docker_deploy.remove_old_dirs

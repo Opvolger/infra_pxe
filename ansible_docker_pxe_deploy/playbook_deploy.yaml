@@ -3,8 +3,8 @@
 
 - hosts: deploy
   tasks:
-    - name: docker-compose down (maybe it is stil on?)
-      shell: docker-compose down
+    - name: docker compose down (maybe it is stil on?)
+      shell: docker compose down
       args:
         chdir: "{{ docker_deploy.dir }}"
 
@@ -13,7 +13,7 @@
       args:
         chdir: "{{ docker_deploy.dir }}"
 
-    - name: docker-compose up -d (start)
-      shell: docker-compose up -d
+    - name: docker compose up -d (start)
+      shell: docker compose up -d
       args:
         chdir: "{{ docker_deploy.dir }}"

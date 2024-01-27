@@ -45,7 +45,7 @@ cd jenkins_build_jobs
 # create docker-compose for jenkins-server and slave (docker)
 ansible-playbook playbook_create_jenkins_compose.yaml -i inventory.yaml --vault-id thuis@~/vault-thuis.txt -vv
 cd ..
-docker-compose up
+docker compose up
 ```
 
 Als je al een buildserver hebt met een slave "docker" en "ansible" of niet uitgevoerd hier boven.
